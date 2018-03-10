@@ -106,48 +106,10 @@
             android:inputType="phone"
             android:maxEms="10" />
 
-        <EditText
-            android:id="@+id/Fees"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:hint="Fees"
-            android:inputType="phone"
-            android:maxEms="10" />
-
-        <EditText
-            android:id="@+id/Location"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:hint="Location"
-
-            android:maxEms="10" />
-
-
-        <EditText
-            android:id="@+id/Time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:hint="eg.2pm-5pm"
-            android:inputType="phone"
-            android:maxEms="10" />
-        <EditText
-            android:id="@+id/Type"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:maxEms="10"
-            android:hint="PHYSICIAN"/>
     </LinearLayout>
 
     <Button
-    android:id="@+id/Register_button"
+    android:id="@+id/save"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_below="@+id/linearLayout"
@@ -161,10 +123,10 @@
         android:id="@+id/logout_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/Register_button"
-        android:layout_alignBottom="@+id/Register_button"
+        android:layout_alignBaseline="@+id/save"
+        android:layout_alignBottom="@+id/save"
         android:layout_marginStart="19dp"
-        android:layout_toEndOf="@+id/Register_button"
+        android:layout_toEndOf="@+id/save"
         android:backgroundTint="?attr/colorPrimaryDark"
         android:text="LOGOUT"
         android:textColor="@android:color/white" />

@@ -22,7 +22,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.PriorityQueue;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -46,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         Email = (EditText) findViewById(R.id.Email);
         Dob = (EditText) findViewById(R.id.Dob);
         Mob = (EditText) findViewById(R.id.Mob);
-        Register_button = (Button) findViewById(R.id.Register_button);
+        Register_button = (Button) findViewById(R.id.save);
         radioSexGroup = (RadioGroup) findViewById(R.id.radioSexGroup);
 
         Register_button.setOnClickListener(new View.OnClickListener() {
