@@ -23,7 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 public class UpComing extends AppCompatActivity {
     // private RecyclerView recyclerView;
     private Button cancel_appointment;
-    String average_time;
+    String average_time ="";
 
     private FirebaseAuth mAuth;
     @Override
@@ -35,7 +35,7 @@ public class UpComing extends AppCompatActivity {
         Intent intent = getIntent();
         if(intent != null) {
           average_time   = intent.getExtras().getString("average_time", "");
-            //Toast.makeText(Confirm.this,"docId is"+docId,Toast.LENGTH_SHORT).show();
+            Toast.makeText(UpComing.this,"average time is" + average_time ,Toast.LENGTH_SHORT).show();
 
 
         }
@@ -50,20 +50,18 @@ public class UpComing extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 int num = (int) dataSnapshot.getChildrenCount();
+                Toast.makeText(UpComing.this,"appointment number is "+ num , Toast.LENGTH_SHORT).show();
                 int average = Integer.parseInt(average_time);
                 average = average*num;
 
                 String user_id = mAuth.getCurrentUser().getUid();
 
+
                 Toast.makeText(UpComing.this,"average time remaining is "+ average , Toast.LENGTH_SHORT).show();
                 DatabaseReference setApp_Num = FirebaseDatabase.getInstance().getReference().child("Appointment").child(user_id);
-                if(setApp_Num.child("app_num")==null) {
+                setApp_Num.child("app_num").setValue(num);
 
-                    setApp_Num.child("app_num").setValue(num);
-                }
-                else{
-                    Toast.makeText(UpComing.this,"You already have an appointment with the doctor" , Toast.LENGTH_SHORT).show();
-                }
+
             }
 
             @Override
@@ -78,6 +76,7 @@ public class UpComing extends AppCompatActivity {
             public void onClick(View view) {
                 String user_id = mAuth.getCurrentUser().getUid();
                 DatabaseReference removeChild = FirebaseDatabase.getInstance().getReference().child("Appointment").child(user_id);
+                removeChild.removeValue();
                 removeChild.removeValue();
                 Intent home = new Intent(UpComing.this,Home.class);
                 startActivity(home);
