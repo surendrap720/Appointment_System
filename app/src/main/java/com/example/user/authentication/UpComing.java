@@ -45,7 +45,7 @@ public class UpComing extends AppCompatActivity {
         cancel_appointment = (Button)findViewById(R.id.cancel_appointment);
 
       // final String user_id = mAuth.getCurrentUser().getUid();
-        DatabaseReference count = FirebaseDatabase.getInstance().getReference().child("Appointment");
+      final  DatabaseReference count = FirebaseDatabase.getInstance().getReference().child("Appointment");
         count.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -58,8 +58,8 @@ public class UpComing extends AppCompatActivity {
 
 
                 Toast.makeText(UpComing.this,"average time remaining is "+ average , Toast.LENGTH_SHORT).show();
-                DatabaseReference setApp_Num = FirebaseDatabase.getInstance().getReference().child("Appointment").child(user_id);
-                setApp_Num.child("app_num").setValue(num);
+              //  DatabaseReference setApp_Num = FirebaseDatabase.getInstance().getReference().child("Appointment").child(user_id);
+                count.child(user_id).child("app_num").setValue(num);
 
 
             }

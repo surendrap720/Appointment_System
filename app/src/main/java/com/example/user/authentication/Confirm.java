@@ -132,7 +132,7 @@ public class Confirm extends AppCompatActivity {
                             Map newPost = new HashMap();
                             newPost.put("docId",docId);
                             newPost.put("patient_name",patientName);
-                            newPost.put("app_num",null);
+                          //  newPost.put("app_num",null);
                             Appointment.setValue(newPost);
                 }
                 else{
