@@ -58,13 +58,11 @@ public class Doctor extends AppCompatActivity {
                 viewHolder.setName(model.getName());
                 viewHolder.setFees(model.getFees());
                 viewHolder.setTime(model.getTime());
-               // viewHolder.setAvg_Time(model.getAvg_time());
+
 
                  final String id = model.getId();
                 viewHolder.setId(id);
-              // viewHolder.setId(model.getId());
 
-                //  viewHolder.setLocation(model.getLocation());
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -124,14 +122,6 @@ public class Doctor extends AppCompatActivity {
         public void setId(String id) {
             Id.setText("Id "+ id);
         }
-
-     /*   public void setAvg_Time(String avg_time) {
-
-        }*/
-
-      /*  public void setLocation(String location) {
-            Time.setText(location);
-        }*/
 
     }
 

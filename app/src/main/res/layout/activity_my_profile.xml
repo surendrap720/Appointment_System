@@ -1,9 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:paddingTop="10dp"
+
     tools:context="com.example.user.authentication.MyProfile">
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="NAME"
+        android:textSize="18dp"/>
+
+    <TextView
+    android:id="@+id/dob"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:text="DOB"
+        android:textSize="18dp"/>
+
+    <TextView
+        android:id="@+id/mob"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="MOB"
+        android:textSize="18dp"/>
+
+    <TextView
+        android:id="@+id/gender"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="GENDER"
+        android:textSize="18dp"/>
+
+    <TextView
+        android:id="@+id/email"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="EMAIL"
+        android:textSize="18dp"/>
+</LinearLayout>

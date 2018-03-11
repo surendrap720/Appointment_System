@@ -71,9 +71,9 @@ public class AuthActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance(); //firebase instance
 
-        database = FirebaseDatabase.getInstance().getReference().child("User");
+       // database =
 
-
+        database = FirebaseDatabase.getInstance().getReference();
 
         AuthListener = new FirebaseAuth.AuthStateListener() {//if user is already logged in
             @Override
@@ -84,8 +84,6 @@ public class AuthActivity extends AppCompatActivity {
                 }
             }
         };
-
-
 
         verify_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,9 +179,6 @@ public class AuthActivity extends AppCompatActivity {
 
                                 checkUserExist(); //if user is successfully logged in we need to check if he is already registered
 
-
-
-
                                 // ...
                             } else {
                                 // Sign in failed, display a message and update the UI
@@ -204,7 +199,7 @@ public class AuthActivity extends AppCompatActivity {
 
         final String user_id = mAuth.getCurrentUser().getUid(); //get the id of the currently logged in user
 
-        database.addValueEventListener(new ValueEventListener() {
+        database.child("User").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -229,6 +224,12 @@ public class AuthActivity extends AppCompatActivity {
 
             }
         });
+
+
+
+
+
+
     }
 }
 

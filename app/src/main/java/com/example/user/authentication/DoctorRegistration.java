@@ -35,6 +35,7 @@ public class DoctorRegistration extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_doctor_registration);
 
         Name = (EditText) findViewById(R.id.Name);
