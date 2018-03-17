@@ -64,10 +64,10 @@ public class Confirm extends AppCompatActivity {
                 String displayLocation  = dataSnapshot.child("location").getValue().toString();
                 String displayTime = dataSnapshot.child("time").getValue().toString();
 
-                DisplayName.setText(displayName);
-                DisplayFees.setText(displayFees);
-                DisplayLocation.setText(displayLocation);
-                DisplayTime.setText(displayTime);
+                DisplayName.setText("Name: "+displayName);
+                DisplayFees.setText("Fees: "+displayFees);
+                DisplayLocation.setText("Location"+displayLocation);
+                DisplayTime.setText("Time"+displayTime);
 
 
             }

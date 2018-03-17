@@ -80,7 +80,7 @@ public class AuthActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if(firebaseAuth.getCurrentUser()!=null){//if not null means there is a user already logged in
                     checkUserExist();
-                    startActivity(new Intent(AuthActivity.this,Home.class));//if logged in already send him to homeactivity rather than login activity
+                   // startActivity(new Intent(AuthActivity.this,Home.class));//if logged in already send him to homeactivity rather than login activity
                 }
             }
         };
@@ -88,33 +88,31 @@ public class AuthActivity extends AppCompatActivity {
         verify_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) { //when verify button is clicked
+                String phone_number = contact_edit_text.getText().toString();
+
+                if(!TextUtils.isEmpty(phone_number)) {
+                    if (btnType == 0) {
+
+                        progressBar.setVisibility(View.VISIBLE);
+                        Text.setText("Waiting for OTP");
+                        PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                                phone_number,        // Phone number to verify
+                                60,                 // Timeout duration
+                                TimeUnit.SECONDS,   // Unit of timeout
+                                AuthActivity.this,               // Activity (for callback binding)
+                                mCallbacks
+                        );        // OnVerificationStateChangedCallbacks
 
 
-                if(btnType==0) {
-
-                    progressBar.setVisibility(View.VISIBLE);
-                    Text.setText("Waiting for OTP");
-
-
-
-                    String phone_number = contact_edit_text.getText().toString();
-
-
-                    PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                            phone_number,        // Phone number to verify
-                            60,                 // Timeout duration
-                            TimeUnit.SECONDS,   // Unit of timeout
-                            AuthActivity.this,               // Activity (for callback binding)
-                            mCallbacks
-                    );        // OnVerificationStateChangedCallbacks
-
-
-
-                }else {
-                    verify_btn.setEnabled(false);
-                    String verificationCode = code_edit_text.getText().toString();
-                    PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId,verificationCode);
-                    signInWithPhoneAuthCredential(credential);
+                    } else {
+                        verify_btn.setEnabled(false);
+                        String verificationCode = code_edit_text.getText().toString();
+                        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, verificationCode);
+                        signInWithPhoneAuthCredential(credential);
+                    }
+                }
+                else{
+                    Toast.makeText(AuthActivity.this,"Please enter phone number",Toast.LENGTH_SHORT).show();
                 }
             }
         });
