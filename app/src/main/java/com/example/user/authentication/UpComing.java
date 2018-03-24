@@ -21,49 +21,42 @@ import com.google.firebase.database.ValueEventListener;
 
 
 public class UpComing extends AppCompatActivity {
-    // private RecyclerView recyclerView;
+
     private Button cancel_appointment;
     String average_time ="";
-
     private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_up_coming);
-
 
         Intent intent = getIntent();
         if(intent != null && intent.getExtras()!=null) {
           average_time   = intent.getExtras().getString("average_time", "");
             Toast.makeText(UpComing.this,"average time is" + average_time ,Toast.LENGTH_SHORT).show();
 
-
         }
 
         mAuth = FirebaseAuth.getInstance();
-
         cancel_appointment = (Button)findViewById(R.id.cancel_appointment);
 
-      // final String user_id = mAuth.getCurrentUser().getUid();
       final  DatabaseReference count = FirebaseDatabase.getInstance().getReference().child("Appointment");
         count.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 int num = (int) dataSnapshot.getChildrenCount();
                 Toast.makeText(UpComing.this,"appointment number is "+ num , Toast.LENGTH_SHORT).show();
+
                 if(average_time!=null&&!average_time.equals("")){
                 int average = Integer.parseInt(average_time);
                 average = average*num;
-                    Toast.makeText(UpComing.this,"average time remaining is "+ average , Toast.LENGTH_SHORT).show();
+                Toast.makeText(UpComing.this,"average time remaining is "+ average , Toast.LENGTH_SHORT).show();
+
                 }
 
                 String user_id = mAuth.getCurrentUser().getUid();
-
-
-               // Toast.makeText(UpComing.this,"average time remaining is "+ average , Toast.LENGTH_SHORT).show();
-              //  DatabaseReference setApp_Num = FirebaseDatabase.getInstance().getReference().child("Appointment").child(user_id);
                 count.child(user_id).child("app_num").setValue(num);
-
 
             }
 
@@ -87,55 +80,5 @@ public class UpComing extends AppCompatActivity {
 
             }
         });
-
-
     }
 }
-      /* DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("/Doctors");
-
-        recyclerView = (RecyclerView)findViewById(R.id.RecyclerView);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        FirebaseRecyclerAdapter<DocDetail,DocViewHolder> adapter = new FirebaseRecyclerAdapter<DocDetail, DocViewHolder>(
-                DocDetail.class,
-                R.layout.individual_row,
-                DocViewHolder.class,
-                reference
-
-        )  {
-            @Override
-            protected void populateViewHolder(DocViewHolder viewHolder, DocDetail model, int position) {
-
-                viewHolder.setName(model.getName());
-                viewHolder.setEmail(model.getEmail());
-            }
-        };
-
-
-        recyclerView.setAdapter(adapter);
-    }
-
-    public static class DocViewHolder extends RecyclerView.ViewHolder{
-        TextView Name;
-        TextView Email;
-        public DocViewHolder(View itemView) {
-            super(itemView);
-            Name = (TextView) itemView.findViewById(R.id.Name);
-            Email = (TextView) itemView.findViewById(R.id.Email);
-        }
-
-        public void setName(String name) {
-
-            Name.setText(name);
-            }
-
-        public void setEmail(String email) {
-
-            Email.setText(email);
-        }
-
-
-
-    }*/
-

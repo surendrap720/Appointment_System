@@ -42,8 +42,7 @@
             android:id="@+id/Time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
+
             android:hint="eg.2pm-5pm"
             android:inputType="phone"
             android:maxEms="10" />
@@ -55,6 +54,24 @@
             android:layout_alignParentEnd="true"
             android:maxEms="10"
             android:hint="PHYSICIAN"/>
+
+        <EditText
+            android:id="@+id/Experience"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:maxEms="10"
+            android:hint="10yrs"/>
+
+        <EditText
+            android:id="@+id/ClinicName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:maxEms="10"
+            android:hint="Ashirvad Hospital"/>
 
         <EditText
             android:id="@+id/Avg_Time"

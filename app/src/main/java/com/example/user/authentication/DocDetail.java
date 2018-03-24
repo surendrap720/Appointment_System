@@ -16,11 +16,11 @@ public class DocDetail {
     private String fees;
     private String id;
     private String avg_time;
+    private String type;
+    private String clinic_name;
+    private String experience;
 
-
-
-
-    public DocDetail(String name, String email, String dob, String mob, String time, String location, String gender, String fees, String id) {
+    public DocDetail(String name, String email, String dob, String mob, String time, String location, String gender, String fees, String id, String avg_time, String type, String clinic_name, String experience) {
         this.name = name;
         this.email = email;
         this.dob = dob;
@@ -29,22 +29,28 @@ public class DocDetail {
         this.location = location;
         this.gender = gender;
         this.fees = fees;
-
         this.id = id;
-
-
+        this.avg_time = avg_time;
+        this.type = type;
+        this.clinic_name = clinic_name;
+        this.experience = experience;
     }
 
-
-
-    public String getId() {
-        return id;
+    public String getName() {
+        return name;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setName(String name) {
+        this.name = name;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public String getDob() {
         return dob;
@@ -94,24 +100,52 @@ public class DocDetail {
         this.fees = fees;
     }
 
-    public String getEmail() {
-        return email;
+    public String getId() {
+        return id;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getAvg_time() {
+        return avg_time;
+    }
+
+    public void setAvg_time(String avg_time) {
+        this.avg_time = avg_time;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getClinic_name() {
+        return clinic_name;
+    }
+
+    public void setClinic_name(String clinic_name) {
+        this.clinic_name = clinic_name;
+    }
+
+    public String getExperience() {
+        return experience;
+    }
+
+    public void setExperience(String experience) {
+        this.experience = experience;
     }
 
     public DocDetail() {
     }
 
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+
+
 
 
 }

@@ -1,101 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.user.authentication.Confirm">
+    tools:context="com.example.user.authentication.Confirm"
+    android:orientation="vertical">
 
    <!-- <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:src="@drawable/doctor"/>-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
  <de.hdodenhof.circleimageview.CircleImageView
      android:id="@+id/profileImage"
      android:layout_width="match_parent"
      android:layout_height="wrap_content"
      android:layout_marginEnd="8dp"
-     android:layout_marginStart="8dp"
+     android:layout_marginTop="8dp"
      android:src="@drawable/profile"
-     app:layout_constraintBottom_toTopOf="@+id/DisplayName"
-     app:layout_constraintEnd_toEndOf="parent"
-     app:layout_constraintStart_toStartOf="parent"
-     app:layout_constraintTop_toTopOf="parent" />
+     />
 
     <TextView
         android:id="@+id/DisplayName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="10dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp"
         android:text="Dr.Ajay Malhotra"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileImage" />
+        android:paddingLeft="10dp"
+        android:layout_marginTop="50dp"
+        android:paddingBottom="30dp"
+        android:textStyle="bold"
+     />
 
     <TextView
         android:id="@+id/DisplayFees"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:paddingBottom="10dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp"
+        android:layout_height="wrap_content"
         android:text="RS.400"
-        android:textSize="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/DisplayName" />
-
-    <TextView
-        android:id="@+id/DisplayLocation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="117dp"
-        android:paddingBottom="10dp"
+        android:textSize="16sp"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp"
         android:paddingTop="10dp"
-        android:text="Sai Hospital"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/book"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/DisplayFees"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <TextView
-        android:id="@+id/DisplayTime"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="85dp"
         android:paddingBottom="10dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp"
-        android:text="Time"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/book"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/DisplayLocation" />
+        />
 
-    <Button
+   <TextView
+       android:id="@+id/DisplayLocation"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:text="Sai Hospital"
+       android:textSize="16sp"
+       android:paddingLeft="10dp"
+       android:paddingTop="10dp"
+       android:paddingBottom="10dp"
+       />
+
+   <TextView
+       android:id="@+id/DisplayTime"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:text="Time"
+       android:textSize="16sp"
+       android:paddingLeft="10dp"
+       android:paddingTop="10dp"
+       android:paddingBottom="10dp"
+      />
+
+        <TextView
+            android:id="@+id/DisplayContact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:text="7208887421"
+            android:textSize="16sp" />
+
+   <TextView
+       android:id="@+id/DisplayExp"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:text="10yrs"
+       android:textSize="16sp"
+       android:paddingLeft="10dp"
+       android:paddingTop="10dp"
+       android:paddingBottom="10dp"
+       />
+
+   <TextView
+       android:id="@+id/DisplayType"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:text="Dentist"
+       android:textSize="16sp"
+       android:paddingLeft="10dp"
+       android:paddingTop="10dp"
+       android:paddingBottom="10dp"
+       />
+   <TextView
+       android:id="@+id/DisplayAvgTime"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:text="10 minutes"
+       android:textSize="16sp"
+       android:paddingLeft="10dp"
+       android:paddingTop="10dp"
+       android:paddingBottom="10dp"
+       />
+
+   <TextView
+       android:id="@+id/DisplayEmail"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:text="doctor@gmail.com"
+       android:textSize="16sp"
+       android:paddingLeft="10dp"
+       android:paddingTop="10dp"
+       android:paddingBottom="10dp"
+       />
+
+   <Button
         android:id="@+id/book"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="476dp"
         android:text="BOOK APPOINTMENT"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</android.support.constraint.ConstraintLayout>
+    android:layout_marginTop="30dp"
+        android:paddingLeft="10dp"
+        />
+
+    </LinearLayout>
+</ScrollView>

@@ -56,12 +56,18 @@ public class Doctor extends AppCompatActivity {
             protected void populateViewHolder(final Doctor.DocViewHolder viewHolder, final DocDetail model, int position) {
 
                 viewHolder.setName(model.getName());
+                viewHolder.setType(model.getType());
+                viewHolder.setClinic_name(model.getClinic_name());
+                viewHolder.setLocation(model.getLocation());
                 viewHolder.setFees(model.getFees());
                 viewHolder.setTime(model.getTime());
+                viewHolder.setExperience(model.getExperience());
+
+
 
 
                  final String id = model.getId();
-                viewHolder.setId(id);
+              // not required  viewHolder.setId(id);
 
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -85,9 +91,14 @@ public class Doctor extends AppCompatActivity {
 
     public static class DocViewHolder extends RecyclerView.ViewHolder {
         TextView Name;
+        TextView Type;
+        TextView ClinicName;
+        TextView Location;
+        TextView Experience;
         TextView Fees;
         TextView Time;
-        TextView Id;
+
+      //nq  TextView Id;
         // TextView Location;
         private CardView card;
 
@@ -97,7 +108,12 @@ public class Doctor extends AppCompatActivity {
             Name = (TextView) itemView.findViewById(R.id.Name);
             Fees = (TextView) itemView.findViewById(R.id.Fees);
             Time = (TextView) itemView.findViewById(R.id.Time);
-            Id = (TextView) itemView.findViewById(R.id.Id);
+            Type = (TextView) itemView.findViewById(R.id.Specialization);
+            ClinicName = (TextView) itemView.findViewById(R.id.ClinicName);
+            Location = (TextView) itemView.findViewById(R.id.Location);
+            Experience = (TextView) itemView.findViewById(R.id.Experience);
+
+        //nq    Id = (TextView) itemView.findViewById(R.id.Id);
             //  Location = (TextView) itemView.findViewById(R.id.Location);
 
 
@@ -105,23 +121,42 @@ public class Doctor extends AppCompatActivity {
 
         public void setName(String name) {
 
-            Name.setText("Name:" + name);
+            Name.setText("Dr. " + name);
         }
 
         public void setFees(String fees) {
 
-            Fees.setText("Fees:" + fees);
+            Fees.setText("Rs. " + fees);
         }
 
 
         public void setTime(String time) {
 
-            Time.setText("Time" + time);
+            Time.setText("Time: " + time);
         }
 
-        public void setId(String id) {
-            Id.setText("Id "+ id);
+        public void setType(String type) {
+            Type.setText(type);
         }
+
+        public void setClinic_name(String clinic_name) {
+            ClinicName.setText(clinic_name);
+        }
+
+        public void setLocation(String location) {
+
+            Location.setText(location);
+        }
+
+        public void setExperience(String experience) {
+            Experience.setText(experience);
+        }
+
+
+
+      /*nq  public void setId(String id) {
+            Id.setText("Id "+ id);
+        }*/
 
     }
 

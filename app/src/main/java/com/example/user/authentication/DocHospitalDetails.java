@@ -23,6 +23,8 @@ public class DocHospitalDetails extends AppCompatActivity {
     private EditText Location;
     private EditText Type;
     private EditText Avg_Time;
+    private EditText ClinicName;
+    private EditText Experience;
     private Button save;
     private Button skip;
     private FirebaseAuth mAuth;
@@ -38,6 +40,8 @@ public class DocHospitalDetails extends AppCompatActivity {
         Time = (EditText) findViewById(R.id.Time);
         Type = (EditText) findViewById(R.id.Type);
         Avg_Time = (EditText) findViewById(R.id.Avg_Time);
+        ClinicName = (EditText) findViewById(R.id.ClinicName);
+        Experience = (EditText)findViewById(R.id.Experience);
         save = (Button) findViewById(R.id.save);
         skip = (Button) findViewById(R.id.skip);
         mAuth = FirebaseAuth.getInstance();
@@ -61,6 +65,9 @@ public class DocHospitalDetails extends AppCompatActivity {
                 final String time = Time.getText().toString();
                 final String type = Type.getText().toString();
                 final String avg_time = Avg_Time.getText().toString();
+                final String clinic_name = ClinicName.getText().toString();
+                final String exp = Experience.getText().toString();
+
 
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (user != null) {
@@ -80,6 +87,8 @@ public class DocHospitalDetails extends AppCompatActivity {
                     current_user_db.child("time").setValue(time);
                     current_user_db.child("type").setValue(type);
                     current_user_db.child("avg_time").setValue(avg_time);
+                    current_user_db.child("clinic_name").setValue(clinic_name);
+                    current_user_db.child("exp").setValue(exp);
                     docType.setValue(name);
 
 

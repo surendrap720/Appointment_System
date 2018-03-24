@@ -28,6 +28,12 @@ public class Confirm extends AppCompatActivity {
     private TextView DisplayFees;
     private TextView DisplayLocation;
     private TextView DisplayTime;
+    private TextView DisplayContact;
+    private TextView DisplayExp;
+    private TextView DisplayType;
+    private TextView DisplayAvgTime;
+    private TextView DisplayEmail;
+
     private FirebaseAuth mAuth;
 
    String docId = "";
@@ -40,19 +46,20 @@ public class Confirm extends AppCompatActivity {
         DisplayFees = (TextView)findViewById(R.id.DisplayFees);
         DisplayLocation = (TextView)findViewById(R.id.DisplayLocation);
         DisplayTime = (TextView)findViewById(R.id.DisplayTime);
+        DisplayContact = (TextView)findViewById(R.id.DisplayContact);
+        DisplayExp = (TextView)findViewById(R.id.DisplayExp);
+        DisplayType = (TextView)findViewById(R.id.DisplayType);
+        DisplayAvgTime = (TextView)findViewById(R.id.DisplayAvgTime);
+        DisplayEmail = (TextView)findViewById(R.id.DisplayEmail);
+        book = (Button)findViewById(R.id.book);
 
 
        Intent intent = getIntent();
         if(intent != null) {
             docId = intent.getExtras().getString("docId", "");
             //Toast.makeText(Confirm.this,"docId is"+docId,Toast.LENGTH_SHORT).show();
-
-
         }
-
-        book = (Button)findViewById(R.id.book);
         mAuth = FirebaseAuth.getInstance();
-
         database = FirebaseDatabase.getInstance().getReference().child("Doctors").child(docId);
 
        database.addValueEventListener(new ValueEventListener() {
@@ -63,13 +70,21 @@ public class Confirm extends AppCompatActivity {
                 String displayFees  = dataSnapshot.child("fees").getValue().toString();
                 String displayLocation  = dataSnapshot.child("location").getValue().toString();
                 String displayTime = dataSnapshot.child("time").getValue().toString();
+                String displayContact  = dataSnapshot.child("mob").getValue().toString();
+                String displayExp  = dataSnapshot.child("exp").getValue().toString();
+                String displayType  = dataSnapshot.child("type").getValue().toString();
+                String displayAvgTime = dataSnapshot.child("avg_time").getValue().toString();
+                String displayEmail  = dataSnapshot.child("email").getValue().toString();
 
-                DisplayName.setText("Name: "+displayName);
-                DisplayFees.setText("Fees: "+displayFees);
-                DisplayLocation.setText("Location"+displayLocation);
-                DisplayTime.setText("Time"+displayTime);
-
-
+                DisplayName.setText(displayName);
+                DisplayFees.setText(displayFees);
+                DisplayLocation.setText(displayLocation);
+                DisplayTime.setText(displayTime);
+                DisplayContact.setText(displayContact);
+                DisplayExp.setText(displayExp);
+                DisplayType.setText(displayType);
+                DisplayAvgTime.setText(displayAvgTime);
+                DisplayEmail.setText(displayEmail);
             }
 
             @Override
@@ -94,13 +109,11 @@ public class Confirm extends AppCompatActivity {
                         startActivity(book);
                         finish();
                     }
-
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
 
                     }
                 });
-
 
                 Intent book = new Intent(Confirm.this,UpComing.class);
                 startActivity(book);
@@ -109,8 +122,6 @@ public class Confirm extends AppCompatActivity {
         });
 
     }
-
-
 
     private void addPatient() {
        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -146,27 +157,6 @@ public class Confirm extends AppCompatActivity {
 
             }
         });
-
-
-
-
-       /* if (user != null) {
-             DatabaseReference Appointment = FirebaseDatabase.getInstance().getReference().child("Appointment").child(user_id);
-
-            Map newPost = new HashMap();
-          //  newPost.put("name", name);
-            newPost.put("id", user_id);
-            newPost.put("patient_name",patientName);
-            newPost.put("appointment_num",appointment_number);
-          //  newPost.put("docName", DocName);
-
-
-        Appointment.setValue(newPost);
-    }
-        else{
-            Toast.makeText(Confirm.this,"Please Login",Toast.LENGTH_SHORT).show();
-        }*/
-
 
     }
 }

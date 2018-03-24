@@ -77,6 +77,8 @@ public class DoctorRegistration extends AppCompatActivity {
                     newPost.put("time", null);
                     newPost.put("type",null);
                     newPost.put("avg_time",null);
+                    newPost.put("clinic_name",null);
+                    newPost.put("exp",null);
 
                     current_user_db.setValue(newPost);
 
