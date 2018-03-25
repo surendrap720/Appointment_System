@@ -74,14 +74,8 @@ public class DocHospitalDetails extends AppCompatActivity {
                     String user_id = mAuth.getCurrentUser().getUid();
                     DatabaseReference current_user_db = FirebaseDatabase.getInstance().getReference().child("Doctors").child(user_id);
                     DatabaseReference docType = FirebaseDatabase.getInstance().getReference().child(type).child(user_id).child("Name");
+                    //separate list of doctors
 
-
-                   /* Map newPost = new HashMap();
-                    newPost.put("fees", fees);
-                    newPost.put("location", location);
-                    newPost.put("time", time);
-                    newPost.put("type",type);
-                    current_user_db.setValue(newPost);*/
                    current_user_db.child("fees").setValue(fees);
                     current_user_db.child("location").setValue(location);
                     current_user_db.child("time").setValue(time);
