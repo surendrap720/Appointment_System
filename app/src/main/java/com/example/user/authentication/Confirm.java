@@ -52,17 +52,22 @@ public class Confirm extends AppCompatActivity {
         DisplayAvgTime = (TextView)findViewById(R.id.DisplayAvgTime);
         DisplayEmail = (TextView)findViewById(R.id.DisplayEmail);
         book = (Button)findViewById(R.id.book);
+        mAuth = FirebaseAuth.getInstance();
+
+        database = FirebaseDatabase.getInstance().getReference();
 
 
-       Intent intent = getIntent();
+
+
+        Intent intent = getIntent();
         if(intent != null) {
             docId = intent.getExtras().getString("docId", "");
             //Toast.makeText(Confirm.this,"docId is"+docId,Toast.LENGTH_SHORT).show();
         }
-        mAuth = FirebaseAuth.getInstance();
-        database = FirebaseDatabase.getInstance().getReference().child("Doctors").child(docId);
 
-       database.addValueEventListener(new ValueEventListener() {
+       // database = FirebaseDatabase.getInstance().getReference().child("Doctors").child(docId);
+
+       database.child("Doctors").child(docId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -99,23 +104,8 @@ public class Confirm extends AppCompatActivity {
             public void onClick(View view) {
 
                 addPatient();
-                DatabaseReference avg_time = FirebaseDatabase.getInstance().getReference().child("Doctors").child(docId);
-                avg_time.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        String average_time = dataSnapshot.child("avg_time").getValue().toString();
-                        Intent book = new Intent(Confirm.this,UpComing.class);
-                        book.putExtra("average_time",average_time);
-                        startActivity(book);
-                        finish();
-                    }
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-
                 Intent book = new Intent(Confirm.this,UpComing.class);
+                book.putExtra("doctorId",docId);
                 startActivity(book);
                 finish();
             }
@@ -124,27 +114,46 @@ public class Confirm extends AppCompatActivity {
     }
 
     private void addPatient() {
-       final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        getUserName();
+
+    }
 
 
+    private void putPatient(final String patientName){
+
+
+         String user_id = mAuth.getCurrentUser().getUid();
+     //   final  DatabaseReference Appointment = FirebaseDatabase.getInstance().getReference().child("Appointment");
+
+
+                Map newPost = new HashMap();
+                newPost.put("docId",docId);
+                newPost.put("patient_name",patientName);
+                 newPost.put("app_num",null);
+
+               database.child("Appointment").child(user_id).setValue(newPost);
+
+
+    }
+
+
+
+    private void getUserName(){
+
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String user_id = mAuth.getCurrentUser().getUid();
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("User").child(user_id);
-        reference.addValueEventListener(new ValueEventListener() {
+
+        //DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("User").child(user_id);
+        database.child("User").child(user_id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
-
-              final  String patientName  = dataSnapshot.child("name").getValue().toString();
+                final  String patientName  = dataSnapshot.child("name").getValue().toString();
                 if (user != null) {
-                    //create a new node and add patient name under a child with id of a doctor
-                    String user_id = mAuth.getCurrentUser().getUid();
-                 final  DatabaseReference Appointment = FirebaseDatabase.getInstance().getReference().child("Appointment").child(user_id);
 
-                            Map newPost = new HashMap();
-                            newPost.put("docId",docId);
-                            newPost.put("patient_name",patientName);
-                          //  newPost.put("app_num",null);
-                            Appointment.setValue(newPost);
+
+                    putPatient(patientName);
+
                 }
                 else{
                     Toast.makeText(Confirm.this,"Please Login",Toast.LENGTH_SHORT).show();
@@ -157,6 +166,7 @@ public class Confirm extends AppCompatActivity {
 
             }
         });
+
 
     }
 }
