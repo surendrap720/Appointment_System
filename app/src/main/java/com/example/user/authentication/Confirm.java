@@ -37,6 +37,7 @@ public class Confirm extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
    String docId = "";
+   int booked = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +61,7 @@ public class Confirm extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-        if(intent != null) {
+        if(intent != null&& intent.getExtras()!=null) {
             docId = intent.getExtras().getString("docId", "");
             //Toast.makeText(Confirm.this,"docId is"+docId,Toast.LENGTH_SHORT).show();
         }
@@ -103,11 +104,23 @@ public class Confirm extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                addPatient();
+
+
+                if(booked==0) {
+
+                    addPatient();
+                    booked=1;
+
+                }
+                else
+                {
+                    Toast.makeText(Confirm.this,"You have already booked an appointment",Toast.LENGTH_SHORT).show();
+                }
+
                 Intent book = new Intent(Confirm.this,UpComing.class);
                 book.putExtra("doctorId",docId);
                 startActivity(book);
-                finish();
+              //  finish();
             }
         });
 
@@ -120,7 +133,7 @@ public class Confirm extends AppCompatActivity {
     }
 
 
-    private void putPatient(final String patientName){
+    private void putPatient(final String patientName, int booked){
 
 
          String user_id = mAuth.getCurrentUser().getUid();
@@ -128,11 +141,15 @@ public class Confirm extends AppCompatActivity {
 
 
                 Map newPost = new HashMap();
-                newPost.put("docId",docId);
+              //  newPost.put("docId",docId);
                 newPost.put("patient_name",patientName);
-                 newPost.put("app_num",null);
+                // newPost.put("app_num",null);
 
-               database.child("Appointment").child(user_id).setValue(newPost);
+               //database.child("Appointment").child(docId).setValue(newPost);
+        database.child("Appointment").child(docId).push().setValue(newPost);
+
+
+
 
 
     }
@@ -151,8 +168,8 @@ public class Confirm extends AppCompatActivity {
                 final  String patientName  = dataSnapshot.child("name").getValue().toString();
                 if (user != null) {
 
-
-                    putPatient(patientName);
+                    booked = 1;
+                    putPatient(patientName,booked);
 
                 }
                 else{

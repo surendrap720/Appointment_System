@@ -88,36 +88,36 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
             Intent mydoctors = new Intent(Home.this,MyDoctors.class);
             startActivity(mydoctors);
-            finish();
+
         }
 
         else if(id==R.id.History){
             Intent history = new Intent(Home.this,History.class);
             startActivity(history);
-            finish();
+
         }
 
         else if(id==R.id.UpComing){
             Intent upcoming = new Intent(Home.this,UpComing.class);
             startActivity(upcoming);
-            finish();
+
         }
 
         else if(id==R.id.Settings){
             Intent settings = new Intent(Home.this,Settings.class);
             startActivity(settings);
-            finish();
+
         }
         else if(id==R.id.FAQ){
             Intent faq = new Intent(Home.this,Faq.class);
             startActivity(faq);
-            finish();
+
         }
         else if(id==R.id.AboutUs){
 
             Intent aboutus = new Intent(Home.this,AboutUs.class);
             startActivity(aboutus);
-            finish();
+
 
         }
         else{

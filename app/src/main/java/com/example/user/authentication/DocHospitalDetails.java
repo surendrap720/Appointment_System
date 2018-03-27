@@ -1,6 +1,8 @@
 package com.example.user.authentication;
 
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -68,6 +70,8 @@ public class DocHospitalDetails extends AppCompatActivity {
                 final String clinic_name = ClinicName.getText().toString();
                 final String exp = Experience.getText().toString();
 
+                getLatLong(location);
+
 
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (user != null) {
@@ -89,12 +93,13 @@ public class DocHospitalDetails extends AppCompatActivity {
                     Toast.makeText(DocHospitalDetails.this, "Your Details are saved.", Toast.LENGTH_SHORT).show();
                     Intent viewAppointment = new Intent(DocHospitalDetails.this,ViewAppointment.class);
                     startActivity(viewAppointment);
-                    finish();
+
 
 
                 }
             }
         });
+
 
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,4 +113,38 @@ public class DocHospitalDetails extends AppCompatActivity {
 
 
 }
+
+private void getLatLong(String address){
+
+    GeocodingLocation locationAddress = new GeocodingLocation();
+    locationAddress.getAddressFromLocation(address,
+            getApplicationContext(), new GeocoderHandler());
+
+}
+
+    private class GeocoderHandler extends Handler {
+        @Override
+        public void handleMessage(Message message) {
+            String locationAddress;
+            String user_id = mAuth.getCurrentUser().getUid();
+            switch (message.what) {
+                case 1:
+                    Bundle bundle = message.getData();
+                    locationAddress = bundle.getString("address");
+                    String address = locationAddress;
+                    String lat = address.substring(0,10);
+                    String lon = address.substring(11);
+
+                   // Toast.makeText(DocHospitalDetails.this,"address is :"+lon,Toast.LENGTH_SHORT).show();
+                    DatabaseReference current_user_db = FirebaseDatabase.getInstance().getReference().child("Doctors").child(user_id);
+                    current_user_db.child("lat").setValue(lat);
+                    current_user_db.child("lon").setValue(lon);
+
+                    break;
+                default:
+                    locationAddress = null;
+            }
+
+        }
+    }
 }
