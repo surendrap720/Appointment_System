@@ -203,10 +203,10 @@ public class AuthActivity extends AppCompatActivity {
 
                 if(!dataSnapshot.hasChild(user_id)){ //if there is a child in the database having this particular user_id
                     //send  him directly to his home page rather than register
-
-                    Intent registerintent = new Intent(AuthActivity.this, Option.class);
+                    checkUserIsDoc();
+                   /* Intent registerintent = new Intent(AuthActivity.this, Option.class);
                     startActivity(registerintent);
-                    finish();
+                    finish();*/
 
                 }
                 else{   //if the user is only logged in and not registered than the we need to get him registered from MainActivity
@@ -223,11 +223,34 @@ public class AuthActivity extends AppCompatActivity {
             }
         });
 
+    }
 
+    private void checkUserIsDoc(){
 
+        final String user_id = mAuth.getCurrentUser().getUid();
+        database.child("Doctors").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.hasChild(user_id)){
 
+                    Intent registerintent = new Intent(AuthActivity.this, Option.class);
+                    startActivity(registerintent);
+                    finish();
 
+                }
+                else{
+                    Intent HomeIntent = new Intent(AuthActivity.this, ViewAppointment.class);
+                    startActivity(HomeIntent);
+                    finish();
+                }
 
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }
 

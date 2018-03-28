@@ -57,9 +57,6 @@ public class Confirm extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance().getReference();
 
-
-
-
         Intent intent = getIntent();
         if(intent != null&& intent.getExtras()!=null) {
             docId = intent.getExtras().getString("docId", "");
@@ -104,23 +101,33 @@ public class Confirm extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                FirebaseUser currentUser = mAuth.getCurrentUser();
 
-
-                if(booked==0) {
-
-                    addPatient();
-                    booked=1;
-
+                if(currentUser==null){   // if user doesn't exist he is not allowed to book an appointment
+                    Toast.makeText(Confirm.this, "You need to login first", Toast.LENGTH_SHORT).show();
+                    Intent authIntent = new Intent(Confirm.this,AuthActivity.class);
+                    startActivity(authIntent);
+                    finish();
                 }
-                else
-                {
-                    Toast.makeText(Confirm.this,"You have already booked an appointment",Toast.LENGTH_SHORT).show();
-                }
+                else {
 
-                Intent book = new Intent(Confirm.this,UpComing.class);
-                book.putExtra("doctorId",docId);
-                startActivity(book);
-              //  finish();
+                    if (booked == 0) {
+
+                        addPatient();
+                        booked = 1;
+                        Intent book = new Intent(Confirm.this, UpComing.class);
+                        book.putExtra("doctorId", docId);
+                        startActivity(book);
+
+                    } else {
+                        Toast.makeText(Confirm.this, "You have already booked an appointment", Toast.LENGTH_SHORT).show();
+                    }
+
+                  /*  Intent book = new Intent(Confirm.this, UpComing.class);
+                    book.putExtra("doctorId", docId);
+                    startActivity(book);
+                    //  finish();*/
+                }
             }
         });
 
@@ -128,7 +135,7 @@ public class Confirm extends AppCompatActivity {
 
     private void addPatient() {
 
-        getUserName();
+         getUserName();
 
     }
 
@@ -146,10 +153,20 @@ public class Confirm extends AppCompatActivity {
                 // newPost.put("app_num",null);
 
                //database.child("Appointment").child(docId).setValue(newPost);
-        database.child("Appointment").child(docId).push().setValue(newPost);
+       //old database.child("Appointment").child(docId).push().setValue(newPost);
+        database.child("Appointment").child(docId).push();
+        String uid = database.child("Appointment").child(docId).push().getKey();
+        database.child("Appointment").child(docId).child(uid).setValue(newPost);
+        sentoUpComing(uid);
 
+    }
 
+    private void sentoUpComing(String uid){
 
+        Intent book = new Intent(Confirm.this, UpComing.class);
+        book.putExtra("doctorId", docId);
+        book.putExtra("pushId",uid);
+        startActivity(book);
 
 
     }
@@ -171,6 +188,8 @@ public class Confirm extends AppCompatActivity {
                     booked = 1;
                     putPatient(patientName,booked);
 
+
+
                 }
                 else{
                     Toast.makeText(Confirm.this,"Please Login",Toast.LENGTH_SHORT).show();
@@ -183,6 +202,9 @@ public class Confirm extends AppCompatActivity {
 
             }
         });
+
+        // nbreturn uid;
+
 
 
     }

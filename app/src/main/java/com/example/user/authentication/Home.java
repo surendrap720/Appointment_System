@@ -49,7 +49,6 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             public void onClick(View view) {
                 Intent doctor = new Intent(Home.this,Doctor.class);
                 startActivity(doctor);
-                finish();
 
             }
         });

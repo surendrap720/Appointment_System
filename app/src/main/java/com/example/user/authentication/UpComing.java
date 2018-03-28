@@ -32,7 +32,6 @@ import org.w3c.dom.Text;
 
 public class UpComing extends AppCompatActivity {
 
-
     private Button cancel_appointment;
     private FirebaseAuth mAuth;
     private TextView Appoint_Number;
@@ -41,16 +40,16 @@ public class UpComing extends AppCompatActivity {
     private TextView Appoint_TimeRemain;
     private TextView Appoint_DocStatus;
     private TextView Appoint_Distance;
-
     LocationManager locationManager;
     String lattitude,longitude;
     private static final int REQUEST_LOCATION = 1;
+    String uid="";
+    String doctorId ="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_up_coming);
-
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
 
         cancel_appointment = (Button)findViewById(R.id.cancel_appointment);
@@ -62,46 +61,48 @@ public class UpComing extends AppCompatActivity {
         Appoint_DocStatus = (TextView)findViewById(R.id.Appoint_DocStatus);
         Appoint_Distance = (TextView)findViewById(R.id.Appoint_Distance);
 
-           Intent intent = getIntent();
+        Intent intent = getIntent();
         if(intent != null && intent.getExtras()!=null) {
-          String doctorId   = intent.getExtras().getString("doctorId", "");
-           // Toast.makeText(UpComing.this,"average time is" + average_time ,Toast.LENGTH_SHORT).show();
+           doctorId   = intent.getExtras().getString("doctorId", "");
+           uid = intent.getExtras().getString("pushId","");
+       //   Toast.makeText(UpComing.this,"pushid is"+uid,Toast.LENGTH_SHORT).show();
             setAppointmentNumber(doctorId);
-
             setAppointmentTime(doctorId);
             setAppointmentDistance(doctorId);
+          // setAppointmentTimeRemain();
 
         }
 
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
 
-       // setAppointmentNumber();
-
-
         cancel_appointment.setOnClickListener(new View.OnClickListener() {
             @Override
-
             public void onClick(View view) {
-                String user_id = mAuth.getCurrentUser().getUid();
-                database.child("Appointment").child(user_id).removeValue();
-                Intent home = new Intent(UpComing.this,Home.class);
-                startActivity(home);
-               // finish();
+                String id = uid;
+                database.child("Appointment").child(doctorId).child(id).removeValue();
+                senToDoctors();
+                Toast.makeText(UpComing.this,"Your appointment has been cancelled",Toast.LENGTH_SHORT).show();
 
             }
         });
 
-
-
     }
-    private void setAppointmentNumber(String doctorId){
 
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child("Appointment").child(doctorId);
+   /* private void setAppointmentTimeRemain(){
+
+       DatabaseReference database = FirebaseDatabase.getInstance().getReference().child("Doctors").child(doctorId);
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                int numberOfPatients = (int) dataSnapshot.getChildrenCount();
-                Appoint_Number.setText("Appointment Number: "+numberOfPatients);
+
+                String avg_time = dataSnapshot.child("avg_time").getValue().toString();
+                int average_time = Integer.parseInt(avg_time);
+               CharSequence num =  Appoint_Number.getText();
+                int number = Integer.parseInt(num.toString());
+                int minutes = average_time*number;
+                Appoint_TimeRemain.setText("You should arrive "+ minutes+" after the doctor's timing");
+
+
             }
 
             @Override
@@ -111,8 +112,32 @@ public class UpComing extends AppCompatActivity {
         });
 
 
+    }*/
+
+    private void senToDoctors(){
+        Intent doctors = new Intent(UpComing.this,Doctor.class);
+        startActivity(doctors);
+        finish();
+    }
+    private void setAppointmentNumber(String doctorId){
+
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child("Appointment").child(doctorId);
+        database.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int numberOfPatients = (int) dataSnapshot.getChildrenCount();
+                String totalPatients = String.valueOf(numberOfPatients);
+                Appoint_Number.setText(totalPatients);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
+
 
     private void setAppointmentTime(String doctorId){
 
@@ -124,7 +149,7 @@ public class UpComing extends AppCompatActivity {
                 String time = dataSnapshot.child("time").getValue().toString();
               //  String docMessage = dataSnapshot.child("message").getValue().toString();
                 String avg_time = dataSnapshot.child("avg_time").getValue().toString();
-                getReachingTime(avg_time);
+                getReachingTime(avg_time);//integer value cannot be set to textView . It should be String
                 Appoint_Time.setText(time);
                // Appoint_DocStatus.setText(docMessage);
             }
@@ -138,9 +163,6 @@ public class UpComing extends AppCompatActivity {
     }
 
     private void getReachingTime(String avg_time){
-
-
-
 
     }
 
@@ -175,37 +197,18 @@ public class UpComing extends AppCompatActivity {
                 final double longi = location.getLongitude();
                 lattitude = String.valueOf(latti);
                 longitude = String.valueOf(longi);
-                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Doctors").child(doctorId);
-                ref.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        String hospital_lat = dataSnapshot.child("lat").getValue().toString();
-                        double hospi_lat = Double.valueOf(hospital_lat);
-                        String hospital_lon = dataSnapshot.child("lon").getValue().toString();
-                        double hospi_lon = Double.valueOf(hospital_lon);
-                       double distance =  calculateDistance(latti,longi,hospi_lat,hospi_lon);
-                       int dist = (int)distance;
-                        Toast.makeText(UpComing.this,"distance is: "+dist,Toast.LENGTH_SHORT).show();
-                    }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
+                displayDistance(lattitude,longitude,doctorId);
 
 
-              /*  textView.setText("Your current location is"+ "\n" + "Lattitude = " + lattitude
-                        + "\n" + "Longitude = " + longitude);*/
 
             } else  if (location1 != null) {
                 double latti = location1.getLatitude();
                 double longi = location1.getLongitude();
                 lattitude = String.valueOf(latti);
                 longitude = String.valueOf(longi);
+                displayDistance(lattitude,longitude,doctorId);
 
-               /* textView.setText("Your current location is"+ "\n" + "Lattitude = " + lattitude
-                        + "\n" + "Longitude = " + longitude);*/
 
 
             } else  if (location2 != null) {
@@ -213,9 +216,9 @@ public class UpComing extends AppCompatActivity {
                 double longi = location2.getLongitude();
                 lattitude = String.valueOf(latti);
                 longitude = String.valueOf(longi);
+                displayDistance(lattitude,longitude,doctorId);
 
-              /*  textView.setText("Your current location is"+ "\n" + "Lattitude = " + lattitude
-                        + "\n" + "Longitude = " + longitude);*/
+
 
             }else{
 
@@ -223,6 +226,35 @@ public class UpComing extends AppCompatActivity {
 
             }
         }
+    }
+
+
+    private void displayDistance(final String latti, final String longi,String doctorId){
+
+        final double lattitude = Double.valueOf(latti);
+        final double longitude = Double.valueOf(longi);
+
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Doctors").child(doctorId);
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String hospital_lat = dataSnapshot.child("lat").getValue().toString();
+                double hospi_lat = Double.valueOf(hospital_lat);
+                String hospital_lon = dataSnapshot.child("lon").getValue().toString();
+                double hospi_lon = Double.valueOf(hospital_lon);
+                double distance =  calculateDistance(lattitude,longitude,hospi_lat,hospi_lon);
+                int dist = (int)distance;
+                Appoint_Distance.setText(dist+" km");
+                // Toast.makeText(UpComing.this,"distance is: "+dist,Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     protected void buildAlertMessageNoGps() {
