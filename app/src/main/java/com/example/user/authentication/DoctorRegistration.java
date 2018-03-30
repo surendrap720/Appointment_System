@@ -81,6 +81,7 @@ public class DoctorRegistration extends AppCompatActivity {
                     newPost.put("exp",null);
                     newPost.put("lat",null);
                     newPost.put("lon",null);
+                    newPost.put("message",null);
 
                     current_user_db.setValue(newPost);
 

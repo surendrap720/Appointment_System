@@ -204,9 +204,8 @@ public class AuthActivity extends AppCompatActivity {
                 if(!dataSnapshot.hasChild(user_id)){ //if there is a child in the database having this particular user_id
                     //send  him directly to his home page rather than register
                     checkUserIsDoc();
-                   /* Intent registerintent = new Intent(AuthActivity.this, Option.class);
-                    startActivity(registerintent);
-                    finish();*/
+
+                    
 
                 }
                 else{   //if the user is only logged in and not registered than the we need to get him registered from MainActivity

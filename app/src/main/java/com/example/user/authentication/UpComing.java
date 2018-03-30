@@ -88,7 +88,7 @@ public class UpComing extends AppCompatActivity {
 
     }
 
-   /* private void setAppointmentTimeRemain(){
+    private void setAppointmentTimeRemain(){
 
        DatabaseReference database = FirebaseDatabase.getInstance().getReference().child("Doctors").child(doctorId);
         database.addValueEventListener(new ValueEventListener() {
@@ -112,7 +112,7 @@ public class UpComing extends AppCompatActivity {
         });
 
 
-    }*/
+    }
 
     private void senToDoctors(){
         Intent doctors = new Intent(UpComing.this,Doctor.class);

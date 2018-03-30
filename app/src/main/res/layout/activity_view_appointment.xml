@@ -7,8 +7,6 @@
     tools:context="com.example.user.authentication.ViewAppointment"
     android:id="@+id/DrawerLayout">
 
-
-
     <android.support.design.widget.NavigationView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -17,8 +15,64 @@
         android:id="@+id/navigationView">
 
     </android.support.design.widget.NavigationView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="START"
+            android:textSize="16sp"
+            android:id="@+id/start_button"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="MESSAGE"
+            android:textSize="16sp"
+            android:id="@+id/message_button"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:id="@+id/messageView">
+
+            <EditText
+                android:id="@+id/messageEditText"
+                android:layout_width="280dp"
+                android:layout_height="40dp"
+                android:visibility="invisible"
+               />
+            <Button
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:text="SEND"
+                android:textSize="16sp"
+                android:id="@+id/send_button"
+                android:visibility="invisible"/>
 
 
 
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/RecyclerView">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="STOP"
+            android:textSize="16sp"
+            android:id="@+id/stop_button"/>
+
+
+
+    </LinearLayout>
 
 </android.support.v4.widget.DrawerLayout>
