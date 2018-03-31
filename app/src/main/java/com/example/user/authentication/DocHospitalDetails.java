@@ -23,14 +23,14 @@ public class DocHospitalDetails extends AppCompatActivity {
     private EditText Fees;
     private EditText Time;
     private EditText Location;
-    private EditText Type;
+
     private EditText Avg_Time;
     private EditText ClinicName;
     private EditText Experience;
     private Button save;
     private Button skip;
     private FirebaseAuth mAuth;
-    private String name = "";
+    private String type = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +40,7 @@ public class DocHospitalDetails extends AppCompatActivity {
         Fees = (EditText) findViewById(R.id.Fees);
         Location = (EditText) findViewById(R.id.Location);
         Time = (EditText) findViewById(R.id.Time);
-        Type = (EditText) findViewById(R.id.Type);
+
         Avg_Time = (EditText) findViewById(R.id.Avg_Time);
         ClinicName = (EditText) findViewById(R.id.ClinicName);
         Experience = (EditText)findViewById(R.id.Experience);
@@ -51,7 +51,7 @@ public class DocHospitalDetails extends AppCompatActivity {
 
         Intent intent = getIntent();
         if(intent != null) {
-            name = intent.getExtras().getString("name", "");
+            type = intent.getExtras().getString("type", "");
             //Toast.makeText(Confirm.this,"docId is"+docId,Toast.LENGTH_SHORT).show();
 
 
@@ -65,7 +65,7 @@ public class DocHospitalDetails extends AppCompatActivity {
                 final String fees = Fees.getText().toString();
                 final String location = Location.getText().toString();
                 final String time = Time.getText().toString();
-                final String type = Type.getText().toString();
+
                 final String avg_time = Avg_Time.getText().toString();
                 final String clinic_name = ClinicName.getText().toString();
                 final String exp = Experience.getText().toString();
@@ -76,18 +76,17 @@ public class DocHospitalDetails extends AppCompatActivity {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (user != null) {
                     String user_id = mAuth.getCurrentUser().getUid();
-                    DatabaseReference current_user_db = FirebaseDatabase.getInstance().getReference().child("Doctors").child(user_id);
-                    DatabaseReference docType = FirebaseDatabase.getInstance().getReference().child(type).child(user_id).child("Name");
+                    DatabaseReference current_user_db = FirebaseDatabase.getInstance().getReference().child(type).child(user_id);
+                   // DatabaseReference docType = FirebaseDatabase.getInstance().getReference().child(type).child(user_id).child("Name");
                     //separate list of doctors
 
                    current_user_db.child("fees").setValue(fees);
                     current_user_db.child("location").setValue(location);
                     current_user_db.child("time").setValue(time);
-                    current_user_db.child("type").setValue(type);
                     current_user_db.child("avg_time").setValue(avg_time);
                     current_user_db.child("clinic_name").setValue(clinic_name);
                     current_user_db.child("exp").setValue(exp);
-                    docType.setValue(name);
+                 //  docType.setValue(name);
 
 
                     Toast.makeText(DocHospitalDetails.this, "Your Details are saved.", Toast.LENGTH_SHORT).show();
@@ -136,7 +135,7 @@ private void getLatLong(String address){
                     String lon = address.substring(11);
 
                    // Toast.makeText(DocHospitalDetails.this,"address is :"+lon,Toast.LENGTH_SHORT).show();
-                    DatabaseReference current_user_db = FirebaseDatabase.getInstance().getReference().child("Doctors").child(user_id);
+                    DatabaseReference current_user_db = FirebaseDatabase.getInstance().getReference().child(type).child(user_id);
                     current_user_db.child("lat").setValue(lat);
                     current_user_db.child("lon").setValue(lon);
 

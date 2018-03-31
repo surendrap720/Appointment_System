@@ -1,28 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/MyProfile"
-        android:title="My Profile"></item>
+        android:title="My Profile"
+        android:icon="@drawable/ic_account_circle_black_24dp"></item>
 
     <item android:id="@+id/MyDoctors"
-        android:title="My Doctors"></item>
+        android:title="My Doctors"
+        android:icon="@drawable/ic_favorite_black_24dp"></item>
 
     <item android:id="@+id/History"
-        android:title="History"></item>
+        android:title="History"
+        android:icon="@drawable/ic_history_black_24dp">
+    </item>
 
     <item android:id="@+id/UpComing"
-        android:title="UpComing"></item>
+        android:title="UpComing"
+        android:icon="@drawable/ic_assignment_turned_in_black_24dp"
+        ></item>
 
     <item android:id="@+id/Settings"
-        android:title="Setting"></item>
+        android:title="Setting"
+        android:icon="@drawable/ic_settings_black_24dp"></item>
 
     <item android:id="@+id/FAQ"
-        android:title="FAQ"></item>
+        android:title="FAQ"
+        android:icon="@drawable/ic_help_black_24dp"></item>
 
     <item android:id="@+id/AboutUs"
-        android:title="About Us"></item>
+        android:title="About Us"
+        android:icon="@drawable/ic_info_black_24dp"></item>
 
     <item android:id="@+id/Logout"
-        android:title="Logout"></item>
+        android:title="Logout"
+        android:icon="@drawable/ic_exit_to_app_black_24dp"></item>
 
 
 

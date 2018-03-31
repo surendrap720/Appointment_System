@@ -26,6 +26,7 @@ public class DoctorRegistration extends AppCompatActivity {
     private EditText Email;
     private EditText Dob;
     private EditText Mob;
+    private EditText Type;
     private RadioGroup radioSexGroup;
     private RadioButton radioSexButton;
     private Button Register_button;
@@ -42,6 +43,7 @@ public class DoctorRegistration extends AppCompatActivity {
         Email = (EditText) findViewById(R.id.Email);
         Dob = (EditText) findViewById(R.id.Dob);
         Mob = (EditText) findViewById(R.id.Mob);
+        Type = (EditText) findViewById(R.id.Type);
         Register_button = (Button) findViewById(R.id.save);
         logout_btn = (Button) findViewById(R.id.logout_btn);
         radioSexGroup = (RadioGroup) findViewById(R.id.radioSexGroup);
@@ -56,12 +58,13 @@ public class DoctorRegistration extends AppCompatActivity {
                 final String email = Email.getText().toString();
                 final String dob = Dob.getText().toString();
                 final String mob = Mob.getText().toString();
+                final String type = Type.getText().toString();
                 final String gender = radioSexButton.getText().toString();
 
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (user != null) {
                     String user_id = mAuth.getCurrentUser().getUid();
-                    DatabaseReference current_user_db = FirebaseDatabase.getInstance().getReference().child("Doctors").child(user_id);
+                    DatabaseReference current_user_db = FirebaseDatabase.getInstance().getReference().child(type).child(user_id);
                    DatabaseReference docNames = FirebaseDatabase.getInstance().getReference().child("DocNames").child(user_id).child("Name");
 
 
@@ -75,7 +78,7 @@ public class DoctorRegistration extends AppCompatActivity {
                     newPost.put("fees", null);
                     newPost.put("location", null);
                     newPost.put("time", null);
-                    newPost.put("type",null);
+                    newPost.put("type",type);
                     newPost.put("avg_time",null);
                     newPost.put("clinic_name",null);
                     newPost.put("exp",null);
@@ -89,7 +92,7 @@ public class DoctorRegistration extends AppCompatActivity {
 
                     Toast.makeText(DoctorRegistration.this, "You are successfully registered.", Toast.LENGTH_SHORT).show();
                     Intent viewAppointment = new Intent(DoctorRegistration.this,DocHospitalDetails.class);
-                    viewAppointment.putExtra("name",name);
+                    viewAppointment.putExtra("type",type);
                     startActivity(viewAppointment);
                     finish();
 

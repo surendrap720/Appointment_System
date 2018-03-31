@@ -106,6 +106,19 @@
             android:inputType="phone"
             android:maxEms="10" />
 
+        <EditText
+            android:id="@+id/Type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/linearLayout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:hint="physician"
+            android:inputType="textPersonName"
+            android:maxEms="10" />
+
+
     </LinearLayout>
 
     <Button

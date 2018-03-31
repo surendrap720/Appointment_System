@@ -25,15 +25,16 @@ import com.google.firebase.database.ValueEventListener;
 
 public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private Button physician;
+    private Button dentist;
     private DrawerLayout mDrawerlayout;
     private ActionBarDrawerToggle mToggle;
     private FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setTitle("Home");
         setContentView(R.layout.activity_home);
 
-        physician = (Button) findViewById(R.id.physician);
         mDrawerlayout=(DrawerLayout)findViewById(R.id.DrawerLayout);
         mToggle = new ActionBarDrawerToggle(this, mDrawerlayout,R.string.open,R.string.close);
         mDrawerlayout.addDrawerListener(mToggle);
@@ -42,17 +43,35 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         NavigationView navigationView = (NavigationView)findViewById(R.id.navigationView);
         navigationView.setNavigationItemSelectedListener(this);
         mAuth = FirebaseAuth.getInstance();
-
+        physician = (Button) findViewById(R.id.physician);
+        dentist = findViewById(R.id.dentist);
 
         physician.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String controller = physician.getText().toString();
+                Toast.makeText(Home.this,"you clicked "+controller,Toast.LENGTH_SHORT).show();
                 Intent doctor = new Intent(Home.this,Doctor.class);
+                doctor.putExtra("physician",controller);
                 startActivity(doctor);
 
             }
         });
+
+        dentist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String controller = dentist.getText().toString();
+                Toast.makeText(Home.this,"you clicked "+controller,Toast.LENGTH_SHORT).show();
+                Intent doctor = new Intent(Home.this,Doctor.class);
+                doctor.putExtra("physician",controller);
+                startActivity(doctor);
+
+            }
+        });
+
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

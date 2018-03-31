@@ -10,17 +10,16 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:id="@+id/Appoint_Number"
         android:textSize="18sp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="10dp"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         />
 
-    <TextView
+  <!--  <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Day:"
@@ -62,25 +61,26 @@
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
         android:paddingLeft="5dp"
-        android:paddingRight="5dp"/>
+        android:paddingRight="5dp"/>-->
 
     <TextView
+        android:id="@+id/Appoint_Distance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="5km "
-        android:id="@+id/Appoint_Distance"
-        android:textSize="18sp"
-        android:paddingTop="5dp"
         android:paddingBottom="5dp"
         android:paddingLeft="5dp"
-        android:paddingRight="5dp"/>
+        android:paddingRight="5dp"
+        android:paddingTop="5dp"
+        android:textSize="18sp" />
 
     <Button
         android:id="@+id/cancel_appointment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="CANCEL APPOINTMENT"
-        android:layout_marginTop="210dp"/>
+        android:layout_marginTop="430dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:text="CANCEL APPOINTMENT" />
 
 
 </LinearLayout>

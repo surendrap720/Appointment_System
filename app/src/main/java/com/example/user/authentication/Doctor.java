@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,25 +26,44 @@ import com.google.firebase.database.FirebaseDatabase;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Doctor extends AppCompatActivity {
     // private ListView lst;
     // private ArrayList<String> username = new ArrayList<>();
     // private ArrayList<DoctorModel> doctorDetails = new ArrayList<>();
-
+    String docView = "";
     private RecyclerView recyclerView;
+
+    String id = "";
+    private FirebaseAuth mAuth;
+    String user_id ="";
+    String type = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setTitle("Doctors");
         setContentView(R.layout.activity_doctor);
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("/Doctors");
+        mAuth = FirebaseAuth.getInstance();
+
+
+        Intent intent = getIntent();
+        if(intent != null&& intent.getExtras()!=null) {
+          docView   = intent.getExtras().getString("physician", "");
+            //Toast.makeText(Doctor.this,"docView is"+docView,Toast.LENGTH_SHORT).show();
+        }
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(docView);
+        user_id = mAuth.getCurrentUser().getUid();
 
 
         recyclerView = (RecyclerView) findViewById(R.id.RecyclerView);
         recyclerView.setHasFixedSize(true);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
 
         FirebaseRecyclerAdapter<DocDetail, Doctor.DocViewHolder> adapter = new FirebaseRecyclerAdapter<DocDetail, Doctor.DocViewHolder>(
                 DocDetail.class,
@@ -57,6 +77,7 @@ public class Doctor extends AppCompatActivity {
 
                 viewHolder.setName(model.getName());
                 viewHolder.setType(model.getType());
+                type = model.getType();
                 viewHolder.setClinic_name(model.getClinic_name());
                 viewHolder.setLocation(model.getLocation());
                 viewHolder.setFees(model.getFees());
@@ -66,7 +87,7 @@ public class Doctor extends AppCompatActivity {
 
 
 
-                 final String id = model.getId();
+                  id = model.getId();
               // not required  viewHolder.setId(id);
 
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -75,9 +96,20 @@ public class Doctor extends AppCompatActivity {
                        // Toast.makeText(Doctor.this,"clicked",Toast.LENGTH_SHORT).show();
                         Intent doctorProfile = new Intent(Doctor.this,Confirm.class);
                         doctorProfile.putExtra("docId" ,id);
+                        doctorProfile.putExtra("docView",docView);
                       //  doctorProfile.putExtra("docName" ,id);
                         startActivity(doctorProfile);
                         finish();
+                    }
+                });
+
+                viewHolder.save.setOnClickListener(new View.OnClickListener() {//for mydoctor
+                    @Override
+                    public void onClick(View view) {
+                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(user_id).child("MyDoctors").child(id);
+                        Map newPost = new HashMap();
+                        newPost.put("type",type );
+                        ref.setValue(newPost);
                     }
                 });
 
@@ -86,7 +118,14 @@ public class Doctor extends AppCompatActivity {
 
 
         recyclerView.setAdapter(adapter);
+
+
+
+
     }
+
+
+
 
 
     public static class DocViewHolder extends RecyclerView.ViewHolder {
@@ -97,6 +136,7 @@ public class Doctor extends AppCompatActivity {
         TextView Experience;
         TextView Fees;
         TextView Time;
+        private Button save;
 
       //nq  TextView Id;
         // TextView Location;
@@ -112,6 +152,7 @@ public class Doctor extends AppCompatActivity {
             ClinicName = (TextView) itemView.findViewById(R.id.ClinicName);
             Location = (TextView) itemView.findViewById(R.id.Location);
             Experience = (TextView) itemView.findViewById(R.id.Experience);
+            save = (Button)itemView.findViewById(R.id.save);
 
         //nq    Id = (TextView) itemView.findViewById(R.id.Id);
             //  Location = (TextView) itemView.findViewById(R.id.Location);

@@ -45,6 +45,7 @@ public class UpComing extends AppCompatActivity {
     private static final int REQUEST_LOCATION = 1;
     String uid="";
     String doctorId ="";
+    String type ="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,20 +56,21 @@ public class UpComing extends AppCompatActivity {
         cancel_appointment = (Button)findViewById(R.id.cancel_appointment);
         mAuth = FirebaseAuth.getInstance();
         Appoint_Number = (TextView)findViewById(R.id.Appoint_Number);
-        Appoint_Day = (TextView)findViewById(R.id.Appoint_Day);
+      /*  Appoint_Day = (TextView)findViewById(R.id.Appoint_Day);
         Appoint_Time = (TextView)findViewById(R.id.Appoint_Time);
         Appoint_TimeRemain = (TextView)findViewById(R.id.Appoint_TimeRemain);
-        Appoint_DocStatus = (TextView)findViewById(R.id.Appoint_DocStatus);
+        Appoint_DocStatus = (TextView)findViewById(R.id.Appoint_DocStatus);*/
         Appoint_Distance = (TextView)findViewById(R.id.Appoint_Distance);
 
         Intent intent = getIntent();
         if(intent != null && intent.getExtras()!=null) {
            doctorId   = intent.getExtras().getString("doctorId", "");
            uid = intent.getExtras().getString("pushId","");
-       //   Toast.makeText(UpComing.this,"pushid is"+uid,Toast.LENGTH_SHORT).show();
+            type = intent.getExtras().getString("type","");
+         Toast.makeText(UpComing.this,"pushid is"+type,Toast.LENGTH_SHORT).show();
             setAppointmentNumber(doctorId);
-            setAppointmentTime(doctorId);
-            setAppointmentDistance(doctorId);
+          //  setAppointmentTime(doctorId);
+          //  setAppointmentDistance(doctorId);
           // setAppointmentTimeRemain();
 
         }
@@ -78,8 +80,8 @@ public class UpComing extends AppCompatActivity {
         cancel_appointment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String id = uid;
-                database.child("Appointment").child(doctorId).child(id).removeValue();
+             //   String id = uid;
+                database.child("Appointment").child(doctorId).child(uid).removeValue();
                 senToDoctors();
                 Toast.makeText(UpComing.this,"Your appointment has been cancelled",Toast.LENGTH_SHORT).show();
 
@@ -88,9 +90,9 @@ public class UpComing extends AppCompatActivity {
 
     }
 
-    private void setAppointmentTimeRemain(){
+  /*  private void setAppointmentTimeRemain(){
 
-       DatabaseReference database = FirebaseDatabase.getInstance().getReference().child("Doctors").child(doctorId);
+       DatabaseReference database = FirebaseDatabase.getInstance().getReference().child(type).child(doctorId);
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -112,10 +114,10 @@ public class UpComing extends AppCompatActivity {
         });
 
 
-    }
+    }*/
 
     private void senToDoctors(){
-        Intent doctors = new Intent(UpComing.this,Doctor.class);
+        Intent doctors = new Intent(UpComing.this,Home.class);
         startActivity(doctors);
         finish();
     }
@@ -139,9 +141,9 @@ public class UpComing extends AppCompatActivity {
     }
 
 
-    private void setAppointmentTime(String doctorId){
+ /*   private void setAppointmentTime(String doctorId){
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Doctors").child(doctorId);
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(type).child(doctorId);
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -164,10 +166,10 @@ public class UpComing extends AppCompatActivity {
 
     private void getReachingTime(String avg_time){
 
-    }
+    }*/
 
 
-    private void setAppointmentDistance(String docId){
+  /* private void setAppointmentDistance(String docId){
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -176,9 +178,9 @@ public class UpComing extends AppCompatActivity {
         } else if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             getLocation(docId);
         }
-    }
+    }*/
 
-    private void getLocation(String doctorId) {
+   /* private void getLocation(String doctorId) {
         if (ActivityCompat.checkSelfPermission(UpComing.this, android.Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission
                 (UpComing.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -226,16 +228,16 @@ public class UpComing extends AppCompatActivity {
 
             }
         }
-    }
+    }*/
 
 
-    private void displayDistance(final String latti, final String longi,String doctorId){
+ /*   private void displayDistance(final String latti, final String longi,String doctorId){
 
         final double lattitude = Double.valueOf(latti);
         final double longitude = Double.valueOf(longi);
 
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Doctors").child(doctorId);
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(type).child(doctorId);
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -255,9 +257,9 @@ public class UpComing extends AppCompatActivity {
             }
         });
 
-    }
+    }*/
 
-    protected void buildAlertMessageNoGps() {
+ /*   protected void buildAlertMessageNoGps() {
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Please Turn ON your GPS Connection")
@@ -295,5 +297,5 @@ public class UpComing extends AppCompatActivity {
 
     private double rad2deg(double rad) {
         return (rad * 180.0 / Math.PI);
-    }
+    }*/
 }

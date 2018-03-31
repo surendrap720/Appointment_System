@@ -37,6 +37,9 @@ public class Confirm extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
    String docId = "";
+   String docView = "";
+   String displayType = "";
+   String uid = "";
    int booked = 0;
 
     @Override
@@ -60,12 +63,14 @@ public class Confirm extends AppCompatActivity {
         Intent intent = getIntent();
         if(intent != null&& intent.getExtras()!=null) {
             docId = intent.getExtras().getString("docId", "");
+            docView = intent.getExtras().getString("docView", "");
+
             //Toast.makeText(Confirm.this,"docId is"+docId,Toast.LENGTH_SHORT).show();
         }
 
        // database = FirebaseDatabase.getInstance().getReference().child("Doctors").child(docId);
 
-       database.child("Doctors").child(docId).addValueEventListener(new ValueEventListener() {
+       database.child(docView).child(docId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -75,18 +80,18 @@ public class Confirm extends AppCompatActivity {
                 String displayTime = dataSnapshot.child("time").getValue().toString();
                 String displayContact  = dataSnapshot.child("mob").getValue().toString();
                 String displayExp  = dataSnapshot.child("exp").getValue().toString();
-                String displayType  = dataSnapshot.child("type").getValue().toString();
+                 displayType  = dataSnapshot.child("type").getValue().toString();
                 String displayAvgTime = dataSnapshot.child("avg_time").getValue().toString();
                 String displayEmail  = dataSnapshot.child("email").getValue().toString();
 
-                DisplayName.setText(displayName);
-                DisplayFees.setText(displayFees);
+                DisplayName.setText("Dr. "+displayName);
+                DisplayFees.setText("Rs. "+displayFees);
                 DisplayLocation.setText(displayLocation);
-                DisplayTime.setText(displayTime);
+                DisplayTime.setText(displayTime+" pm");
                 DisplayContact.setText(displayContact);
-                DisplayExp.setText(displayExp);
+                DisplayExp.setText(displayExp+" years");
                 DisplayType.setText(displayType);
-                DisplayAvgTime.setText(displayAvgTime);
+                DisplayAvgTime.setText(displayAvgTime+" min");
                 DisplayEmail.setText(displayEmail);
             }
 
@@ -155,17 +160,19 @@ public class Confirm extends AppCompatActivity {
                //database.child("Appointment").child(docId).setValue(newPost);
        //old database.child("Appointment").child(docId).push().setValue(newPost);
         database.child("Appointment").child(docId).push();
-        String uid = database.child("Appointment").child(docId).push().getKey();
+        uid = database.child("Appointment").child(docId).push().getKey();
+        Toast.makeText(Confirm.this,"id pushed  is"+uid,Toast.LENGTH_SHORT).show();
         database.child("Appointment").child(docId).child(uid).setValue(newPost);
-        sentoUpComing(uid);
+        sentoUpComing();
 
     }
 
-    private void sentoUpComing(String uid){
+    private void sentoUpComing(){
 
         Intent book = new Intent(Confirm.this, UpComing.class);
         book.putExtra("doctorId", docId);
         book.putExtra("pushId",uid);
+        book.putExtra("type",displayType);
         startActivity(book);
 
 

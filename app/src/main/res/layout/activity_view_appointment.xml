@@ -1,24 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.user.authentication.ViewAppointment"
-    android:id="@+id/DrawerLayout">
+    android:orientation="vertical">
 
-    <android.support.design.widget.NavigationView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        app:menu="@menu/docnavigation_menu"
-        android:layout_gravity="start"
-        android:id="@+id/navigationView">
-
-    </android.support.design.widget.NavigationView>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
 
         <Button
             android:layout_width="match_parent"
@@ -27,40 +15,12 @@
             android:textSize="16sp"
             android:id="@+id/start_button"/>
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:text="MESSAGE"
-            android:textSize="16sp"
-            android:id="@+id/message_button"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
-            android:id="@+id/messageView">
-
-            <EditText
-                android:id="@+id/messageEditText"
-                android:layout_width="280dp"
-                android:layout_height="40dp"
-                android:visibility="invisible"
-               />
-            <Button
-                android:layout_width="80dp"
-                android:layout_height="40dp"
-                android:text="SEND"
-                android:textSize="16sp"
-                android:id="@+id/send_button"
-                android:visibility="invisible"/>
-
-
-
-        </LinearLayout>
-
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/RecyclerView">
+            android:id="@+id/RecyclerView"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp">
 
         </android.support.v7.widget.RecyclerView>
 
@@ -71,8 +31,6 @@
             android:textSize="16sp"
             android:id="@+id/stop_button"/>
 
+</LinearLayout>
 
 
-    </LinearLayout>
-
-</android.support.v4.widget.DrawerLayout>

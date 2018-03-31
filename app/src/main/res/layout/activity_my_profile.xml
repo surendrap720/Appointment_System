@@ -11,38 +11,63 @@
 
     tools:context="com.example.user.authentication.MyProfile">
 
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profileImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="2dp"
+        android:src="@drawable/profile"
+        android:layout_marginBottom="20dp"
+        />
+
     <TextView
         android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:paddingTop="20dp"
         android:text="NAME"
-        android:textSize="18dp"/>
+        android:textSize="18sp"
+        android:drawableLeft="@drawable/ic_account_circle_black_24dp"
+        android:drawablePadding="20dp"/>
 
     <TextView
-    android:id="@+id/dob"
+     android:id="@+id/dob"
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:text="DOB"
-        android:textSize="18dp"/>
+        android:paddingTop="20dp"
+        android:textSize="18sp"
+        android:drawableLeft="@drawable/ic_date_range_black_24dp"
+        android:drawablePadding="20dp"/>
 
     <TextView
         android:id="@+id/mob"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:text="MOB"
-        android:textSize="18dp"/>
+        android:paddingTop="20dp"
+        android:textSize="18sp"
+        android:drawableLeft="@drawable/ic_local_phone_black_24dp"
+        android:drawablePadding="20dp"/>
 
     <TextView
         android:id="@+id/gender"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:text="GENDER"
-        android:textSize="18dp"/>
+        android:paddingTop="20dp"
+        android:textSize="18sp"
+        android:drawableLeft="@drawable/humanmale"
+        android:drawablePadding="20dp"/>
 
     <TextView
         android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:text="EMAIL"
-        android:textSize="18dp"/>
+        android:paddingTop="20dp"
+        android:textSize="18dp"
+        android:drawableLeft="@drawable/ic_email_black_24dp"
+        android:drawablePadding="20dp"/>
 </LinearLayout>

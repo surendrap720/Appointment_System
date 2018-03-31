@@ -33,15 +33,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class ViewAppointment extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class ViewAppointment extends AppCompatActivity  {
 
-    private DrawerLayout mDrawerlayout;
-    private ActionBarDrawerToggle mToggle;
+
     private FirebaseAuth mAuth;
     private RecyclerView recyclerView;
     private Button start;
     private Button stop;
-    private Button message;
+
     private Button send_button;
     private EditText messageEditText;
     private String startFormat="";
@@ -58,17 +57,9 @@ public class ViewAppointment extends AppCompatActivity implements NavigationView
 
         start = findViewById(R.id.start_button);
         stop = findViewById(R.id.stop_button);
-        message = findViewById(R.id.message_button);
-        messageEditText = findViewById(R.id.messageEditText);
-        send_button = findViewById(R.id.send_button);
 
-        mDrawerlayout=(DrawerLayout)findViewById(R.id.DrawerLayout);
-        mToggle = new ActionBarDrawerToggle(this, mDrawerlayout,R.string.open,R.string.close);
-        mDrawerlayout.addDrawerListener(mToggle);
-        mToggle.syncState();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        NavigationView navigationView = (NavigationView)findViewById(R.id.navigationView);
-        navigationView.setNavigationItemSelectedListener(this);
+
+
         mAuth = FirebaseAuth.getInstance();
         user_id = mAuth.getCurrentUser().getUid();
 
@@ -76,6 +67,7 @@ public class ViewAppointment extends AppCompatActivity implements NavigationView
         recyclerView = (RecyclerView) findViewById(R.id.RecyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
 
         start.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,8 +77,6 @@ public class ViewAppointment extends AppCompatActivity implements NavigationView
                 startHr=startFormat.substring(0,2);
                 startMm = startFormat.substring(3);
 
-
-               // Toast.makeText(ViewAppointment.this,"Date is "+startTime.substring(0,2),Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -106,28 +96,9 @@ public class ViewAppointment extends AppCompatActivity implements NavigationView
             }
         });
 
-        message.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-                messageEditText.setVisibility(View.VISIBLE);
-                send_button.setVisibility(View.VISIBLE);
 
-            }
-        });
 
-        send_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                String impMessage = messageEditText.getText().toString();
-                Toast.makeText(ViewAppointment.this,"Important message is "+impMessage,Toast.LENGTH_SHORT).show();
-                messageEditText.setVisibility(View.INVISIBLE);
-                send_button.setVisibility(View.INVISIBLE);
-                setMessage(impMessage);
-
-            }
-        });
 
         FirebaseRecyclerAdapter<PatientList, ViewAppointment.DocViewHolder> adapter = new FirebaseRecyclerAdapter<PatientList, ViewAppointment.DocViewHolder>(
                 PatientList.class,
@@ -147,12 +118,13 @@ public class ViewAppointment extends AppCompatActivity implements NavigationView
         };
 
         recyclerView.setAdapter(adapter);
+
     }
 
     private void setMessage(String impMessage){
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Doctors").child(user_id);
-       ref.child("message").setValue(impMessage);
+      /*  DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("D").child(user_id);
+       ref.child("message").setValue(impMessage);*/
 
     }
 
@@ -186,64 +158,6 @@ public class ViewAppointment extends AppCompatActivity implements NavigationView
     }
 
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        if (mToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-        int id = item.getItemId();
-        if (id == R.id.Logout) {
-            mAuth.signOut();
-            sendToAuth();
-            Toast.makeText(this, "You have logged out", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.MyProfile) {
-
-            Intent myprofile = new Intent(ViewAppointment.this, DocProfile.class);
-            startActivity(myprofile);
-            finish();
-
-        } else if (id == R.id.MyDoctors) {
-
-
-            Intent mydoctors = new Intent(ViewAppointment.this, MyDoctors.class);
-            startActivity(mydoctors);
-
-        } else if (id == R.id.History) {
-            Intent history = new Intent(ViewAppointment.this, History.class);
-            startActivity(history);
-
-        } else if (id == R.id.UpComing) {
-            Intent upcoming = new Intent(ViewAppointment.this, UpComing.class);
-            startActivity(upcoming);
-
-        } else if (id == R.id.Settings) {
-            Intent settings = new Intent(ViewAppointment.this, Settings.class);
-            startActivity(settings);
-
-        } else if (id == R.id.FAQ) {
-            Intent faq = new Intent(ViewAppointment.this, Faq.class);
-            startActivity(faq);
-
-        } else if (id == R.id.AboutUs) {
-
-            Intent aboutus = new Intent(ViewAppointment.this, AboutUs.class);
-            startActivity(aboutus);
-
-
-        } else {
-
-        }
-
-        return false;
-    }
 
     private void sendToAuth() {
         Intent authIntent = new Intent(ViewAppointment.this, AuthActivity.class);
