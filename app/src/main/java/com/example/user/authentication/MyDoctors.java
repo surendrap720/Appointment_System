@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -79,7 +80,7 @@ public class MyDoctors extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         reference.child(doctorId).removeValue();
-
+                        Toast.makeText(MyDoctors.this,"Doctor has been removed from favourites",Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(MyDoctors.this,Home.class);
                         startActivity(intent);
 
