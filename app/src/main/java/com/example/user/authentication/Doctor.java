@@ -40,6 +40,12 @@ public class Doctor extends AppCompatActivity {
     private FirebaseAuth mAuth;
     String user_id ="";
     String type = "";
+    String name = "";
+    String clinicName = "";
+    String location = "";
+    String fees = "";
+    String time = "";
+
 
 
     @Override
@@ -76,12 +82,17 @@ public class Doctor extends AppCompatActivity {
             protected void populateViewHolder(final Doctor.DocViewHolder viewHolder, final DocDetail model, int position) {
 
                 viewHolder.setName(model.getName());
+                name = model.getName();
                 viewHolder.setType(model.getType());
                 type = model.getType();
                 viewHolder.setClinic_name(model.getClinic_name());
+                clinicName = model.getClinic_name();
                 viewHolder.setLocation(model.getLocation());
+                location = model.getLocation();
                 viewHolder.setFees(model.getFees());
+                fees = model.getFees();
                 viewHolder.setTime(model.getTime());
+                time = model.getTime();
                 viewHolder.setExperience(model.getExperience());
 
 
@@ -106,15 +117,22 @@ public class Doctor extends AppCompatActivity {
                 viewHolder.save.setOnClickListener(new View.OnClickListener() {//for mydoctor
                     @Override
                     public void onClick(View view) {
-                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(user_id).child("MyDoctors").child(id);
+                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("MyDoctors").child(user_id).child(id);
                         Map newPost = new HashMap();
-                        newPost.put("type",type );
+                        newPost.put("name",name);
+                        newPost.put("id",id);
+                        newPost.put("type",type);
+                        newPost.put("clinicName",clinicName);
+                        newPost.put("location",location);
+                        newPost.put("fees",fees);
+                        newPost.put("time",time);
                         ref.setValue(newPost);
+
                     }
                 });
 
             }
-        };
+};
 
 
         recyclerView.setAdapter(adapter);

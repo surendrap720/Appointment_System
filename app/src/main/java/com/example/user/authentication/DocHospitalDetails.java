@@ -35,6 +35,7 @@ public class DocHospitalDetails extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setTitle("Hospital Details");
         setContentView(R.layout.activity_doc_hospital_details);
 
         Fees = (EditText) findViewById(R.id.Fees);

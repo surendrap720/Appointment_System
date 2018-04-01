@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setTitle("Registration");
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();

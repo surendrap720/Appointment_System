@@ -53,6 +53,7 @@ public class ViewAppointment extends AppCompatActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setTitle("Appointment List");
         setContentView(R.layout.activity_view_appointment);
 
         start = findViewById(R.id.start_button);

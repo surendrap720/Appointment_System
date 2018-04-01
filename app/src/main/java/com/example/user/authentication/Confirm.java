@@ -1,6 +1,13 @@
 package com.example.user.authentication;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -21,43 +28,57 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Confirm extends AppCompatActivity {
-    Button book;
-   DatabaseReference doctor;
-   DatabaseReference database;
+    private Button book;
+    private DatabaseReference database;
     private TextView DisplayName;
     private TextView DisplayFees;
     private TextView DisplayLocation;
     private TextView DisplayTime;
     private TextView DisplayContact;
     private TextView DisplayExp;
-    private TextView DisplayType;
-    private TextView DisplayAvgTime;
     private TextView DisplayEmail;
-
     private FirebaseAuth mAuth;
-
-   String docId = "";
-   String docView = "";
+    String docId = "";
+    String docView = "";
    String displayType = "";
    String uid = "";
+   String displayTime = "";
+   String displayAvgTime = "";
+   String lat = "";
+   String lon = "";
+   String displayContact = "";
+   String displayEmail = "";
+   String displayFees = "";
+   String displayLocation = "";
+   String displayName = "";
+   String appointmentNumber="";
+   String user_id = "";
+    String lattitude,longitude;
+    LocationManager locationManager;
+    private static final int REQUEST_LOCATION = 1;
    int booked = 0;
+   int dist = 0;
+   String hospitalDistance  ="";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setTitle("Book Appointment");
         setContentView(R.layout.activity_confirm);
+
+        ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+
         DisplayName = (TextView)findViewById(R.id.DisplayName);
         DisplayFees = (TextView)findViewById(R.id.DisplayFees);
         DisplayLocation = (TextView)findViewById(R.id.DisplayLocation);
         DisplayTime = (TextView)findViewById(R.id.DisplayTime);
         DisplayContact = (TextView)findViewById(R.id.DisplayContact);
         DisplayExp = (TextView)findViewById(R.id.DisplayExp);
-        DisplayType = (TextView)findViewById(R.id.DisplayType);
-        DisplayAvgTime = (TextView)findViewById(R.id.DisplayAvgTime);
         DisplayEmail = (TextView)findViewById(R.id.DisplayEmail);
         book = (Button)findViewById(R.id.book);
         mAuth = FirebaseAuth.getInstance();
-
+        user_id = mAuth.getCurrentUser().getUid();
         database = FirebaseDatabase.getInstance().getReference();
 
         Intent intent = getIntent();
@@ -65,24 +86,23 @@ public class Confirm extends AppCompatActivity {
             docId = intent.getExtras().getString("docId", "");
             docView = intent.getExtras().getString("docView", "");
 
-            //Toast.makeText(Confirm.this,"docId is"+docId,Toast.LENGTH_SHORT).show();
         }
-
-       // database = FirebaseDatabase.getInstance().getReference().child("Doctors").child(docId);
 
        database.child(docView).child(docId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                String displayName  = dataSnapshot.child("name").getValue().toString();
-                String displayFees  = dataSnapshot.child("fees").getValue().toString();
-                String displayLocation  = dataSnapshot.child("location").getValue().toString();
-                String displayTime = dataSnapshot.child("time").getValue().toString();
-                String displayContact  = dataSnapshot.child("mob").getValue().toString();
+                displayName  = dataSnapshot.child("name").getValue().toString();
+                displayFees  = dataSnapshot.child("fees").getValue().toString();
+                displayLocation  = dataSnapshot.child("location").getValue().toString();
+                displayTime = dataSnapshot.child("time").getValue().toString();
+                displayContact  = dataSnapshot.child("mob").getValue().toString();
                 String displayExp  = dataSnapshot.child("exp").getValue().toString();
-                 displayType  = dataSnapshot.child("type").getValue().toString();
-                String displayAvgTime = dataSnapshot.child("avg_time").getValue().toString();
-                String displayEmail  = dataSnapshot.child("email").getValue().toString();
+                displayType  = dataSnapshot.child("type").getValue().toString();
+                displayAvgTime = dataSnapshot.child("avg_time").getValue().toString();
+                lat = dataSnapshot.child("lat").getValue().toString();
+                lon = dataSnapshot.child("lon").getValue().toString();
+                displayEmail  = dataSnapshot.child("email").getValue().toString();
 
                 DisplayName.setText("Dr. "+displayName);
                 DisplayFees.setText("Rs. "+displayFees);
@@ -90,8 +110,6 @@ public class Confirm extends AppCompatActivity {
                 DisplayTime.setText(displayTime+" pm");
                 DisplayContact.setText(displayContact);
                 DisplayExp.setText(displayExp+" years");
-                DisplayType.setText(displayType);
-                DisplayAvgTime.setText(displayAvgTime+" min");
                 DisplayEmail.setText(displayEmail);
             }
 
@@ -118,20 +136,18 @@ public class Confirm extends AppCompatActivity {
 
                     if (booked == 0) {
 
-                        addPatient();
+                        addPatient();  // add patient to the appointment node which is visible to the doctor
+
+                        addtoMyAppointment(); // when patient books an appointment the details should be stored in MyAppointment node so
+                                                // that user can view his upcoming details.
                         booked = 1;
                         Intent book = new Intent(Confirm.this, UpComing.class);
-                        book.putExtra("doctorId", docId);
                         startActivity(book);
 
                     } else {
                         Toast.makeText(Confirm.this, "You have already booked an appointment", Toast.LENGTH_SHORT).show();
                     }
 
-                  /*  Intent book = new Intent(Confirm.this, UpComing.class);
-                    book.putExtra("doctorId", docId);
-                    startActivity(book);
-                    //  finish();*/
                 }
             }
         });
@@ -140,52 +156,14 @@ public class Confirm extends AppCompatActivity {
 
     private void addPatient() {
 
-         getUserName();
+        getUserName();
 
     }
-
-
-    private void putPatient(final String patientName, int booked){
-
-
-         String user_id = mAuth.getCurrentUser().getUid();
-     //   final  DatabaseReference Appointment = FirebaseDatabase.getInstance().getReference().child("Appointment");
-
-
-                Map newPost = new HashMap();
-              //  newPost.put("docId",docId);
-                newPost.put("patient_name",patientName);
-                // newPost.put("app_num",null);
-
-               //database.child("Appointment").child(docId).setValue(newPost);
-       //old database.child("Appointment").child(docId).push().setValue(newPost);
-        database.child("Appointment").child(docId).push();
-        uid = database.child("Appointment").child(docId).push().getKey();
-        Toast.makeText(Confirm.this,"id pushed  is"+uid,Toast.LENGTH_SHORT).show();
-        database.child("Appointment").child(docId).child(uid).setValue(newPost);
-        sentoUpComing();
-
-    }
-
-    private void sentoUpComing(){
-
-        Intent book = new Intent(Confirm.this, UpComing.class);
-        book.putExtra("doctorId", docId);
-        book.putExtra("pushId",uid);
-        book.putExtra("type",displayType);
-        startActivity(book);
-
-
-    }
-
-
 
     private void getUserName(){
 
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String user_id = mAuth.getCurrentUser().getUid();
 
-        //DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("User").child(user_id);
         database.child("User").child(user_id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -195,12 +173,63 @@ public class Confirm extends AppCompatActivity {
                     booked = 1;
                     putPatient(patientName,booked);
 
-
-
                 }
-                else{
+                else
+                {
                     Toast.makeText(Confirm.this,"Please Login",Toast.LENGTH_SHORT).show();
                 }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    private void putPatient(final String patientName, int booked){
+
+        Map newPost = new HashMap();
+        newPost.put("patient_name",patientName);
+        database.child("Appointment").child(docId).push();
+        uid = database.child("Appointment").child(docId).push().getKey();
+        Toast.makeText(Confirm.this,"id pushed  is"+uid,Toast.LENGTH_SHORT).show();
+        database.child("Appointment").child(docId).child(uid).setValue(newPost);
+
+    }
+
+    private void addtoMyAppointment(){
+
+        Map newPost = new HashMap();
+        newPost.put("docId",docId);
+        newPost.put("lat",lat);
+        newPost.put("lon",lon);
+        newPost.put("avg_time",displayAvgTime);
+        newPost.put("time",displayTime);
+        newPost.put("type",displayType);
+        newPost.put("mob",displayContact);
+        newPost.put("email",displayEmail);
+        newPost.put("location",displayLocation);
+        newPost.put("fees",displayFees);
+        newPost.put("name",displayName);
+        newPost.put("appointmentNumber",appointmentNumber);
+        newPost.put("distance",dist);
+        database.child("MyAppointments").child(user_id).setValue(newPost);
+        getAppointmentNumber();
+        setAppointmentDistance();
+
+    }
+
+    private void getAppointmentNumber(){
+
+        final DatabaseReference database1 = FirebaseDatabase.getInstance().getReference().child("Appointment").child(docId);
+        database1.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int numberOfPatients = (int) dataSnapshot.getChildrenCount();
+                appointmentNumber = String.valueOf(numberOfPatients);
+                Toast.makeText(Confirm.this, "Appointment Number is "+appointmentNumber,Toast.LENGTH_SHORT ).show();
+                database.child("MyAppointments").child(user_id).child("appointmentNumber").setValue(appointmentNumber);
 
             }
 
@@ -209,10 +238,137 @@ public class Confirm extends AppCompatActivity {
 
             }
         });
+    }
 
-        // nbreturn uid;
+    private void setAppointmentDistance(){
+
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            buildAlertMessageNoGps();
+
+        } else if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            getLocation();
+        }
+    }
+
+    private void getLocation() {
+        if (ActivityCompat.checkSelfPermission(Confirm.this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission
+                (Confirm.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(Confirm.this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+
+        } else {
+            Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+            Location location1 = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+            Location location2 = locationManager.getLastKnownLocation(LocationManager. PASSIVE_PROVIDER);
+
+            if (location != null) {
+                final double latti = location.getLatitude();
+                final double longi = location.getLongitude();
+                lattitude = String.valueOf(latti);
+                longitude = String.valueOf(longi);
+
+                displayDistance(lattitude,longitude);
 
 
+
+            } else  if (location1 != null) {
+                double latti = location1.getLatitude();
+                double longi = location1.getLongitude();
+                lattitude = String.valueOf(latti);
+                longitude = String.valueOf(longi);
+                displayDistance(lattitude,longitude);
+
+
+
+            } else  if (location2 != null) {
+                double latti = location2.getLatitude();
+                double longi = location2.getLongitude();
+                lattitude = String.valueOf(latti);
+                longitude = String.valueOf(longi);
+                displayDistance(lattitude,longitude);
+
+
+
+            }else{
+
+                Toast.makeText(this,"Unble to Trace your location",Toast.LENGTH_SHORT).show();
+
+            }
+        }
+    }
+
+    private void displayDistance(final String latti, final String longi){
+
+        final double lattitude = Double.valueOf(latti);
+        final double longitude = Double.valueOf(longi);
+
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(docView).child(docId);
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String hospital_lat = dataSnapshot.child("lat").getValue().toString();
+                double hospi_lat = Double.valueOf(hospital_lat);
+                String hospital_lon = dataSnapshot.child("lon").getValue().toString();
+                double hospi_lon = Double.valueOf(hospital_lon);
+                double distance =  calculateDistance(lattitude,longitude,hospi_lat,hospi_lon);
+                dist = (int)distance;
+                hospitalDistance = String.valueOf(dist);
+
+               database.child("MyAppointments").child(user_id).child("distance").setValue(hospitalDistance);
+                // Toast.makeText(UpComing.this,"distance is: "+dist,Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
+
+    protected void buildAlertMessageNoGps() {
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Please Turn ON your GPS Connection")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+        double theta = lon1 - lon2;
+        double dist = Math.sin(deg2rad(lat1))
+                * Math.sin(deg2rad(lat2))
+                + Math.cos(deg2rad(lat1))
+                * Math.cos(deg2rad(lat2))
+                * Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
+        return (dist);
+    }
+
+    private double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+
+    private double rad2deg(double rad) {
+        return (rad * 180.0 / Math.PI);
+    }
+
 }

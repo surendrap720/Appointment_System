@@ -1,9 +1,11 @@
 package com.example.user.authentication;
 
 import android.content.ClipData;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -29,11 +31,14 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     private DrawerLayout mDrawerlayout;
     private ActionBarDrawerToggle mToggle;
     private FirebaseAuth mAuth;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setTitle("Home");
         setContentView(R.layout.activity_home);
+
 
         mDrawerlayout=(DrawerLayout)findViewById(R.id.DrawerLayout);
         mToggle = new ActionBarDrawerToggle(this, mDrawerlayout,R.string.open,R.string.close);
@@ -71,6 +76,29 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         });
 
     }
+
+
+  /*  public void open(View view){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Are you sure, You wanted to make decision");
+                alertDialogBuilder.setPositiveButton("yes",
+                        new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
+                    Toast.makeText(Home.this,"You clicked yes button",Toast.LENGTH_LONG).show();
+                }
+            });
+
+        alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }*/
 
 
     @Override
@@ -149,6 +177,19 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         authIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(authIntent);
         finish();
+    }
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle(" Exit")
+                .setMessage("Are you sure you want to exit?")
+                .setNegativeButton(android.R.string.no, null)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        finish();
+                    }
+                }).create().show();
     }
 
 }

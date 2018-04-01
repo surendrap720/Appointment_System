@@ -25,6 +25,7 @@ public class MyProfile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_profile);
+        getSupportActionBar().setTitle("My Profile");
 
         name = (TextView)findViewById(R.id.name);
         dob = (TextView)findViewById(R.id.dob);
