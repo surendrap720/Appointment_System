@@ -125,7 +125,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
             Intent myprofile = new Intent(Home.this,MyProfile.class);
             startActivity(myprofile);
-            finish();
+           // finish();
 
         }
 

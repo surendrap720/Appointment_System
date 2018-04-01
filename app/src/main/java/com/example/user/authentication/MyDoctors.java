@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -79,8 +80,9 @@ public class MyDoctors extends AppCompatActivity {
                     public void onClick(View view) {
                         reference.child(doctorId).removeValue();
 
-                        Intent intent = new Intent(MyDoctors.this,MyDoctors.class);
+                        Intent intent = new Intent(MyDoctors.this,Home.class);
                         startActivity(intent);
+
 
                     }
                 });
@@ -97,6 +99,7 @@ public class MyDoctors extends AppCompatActivity {
 
     }
 
+
     public static class DocViewHolder extends RecyclerView.ViewHolder {
         TextView Name;
         TextView Type;
@@ -105,7 +108,7 @@ public class MyDoctors extends AppCompatActivity {
         TextView Experience;
         TextView Fees;
         TextView Time;
-        private Button save;
+        private ImageButton save;
 
         //nq  TextView Id;
         // TextView Location;
@@ -117,7 +120,7 @@ public class MyDoctors extends AppCompatActivity {
             Name = (TextView) itemView.findViewById(R.id.Name);
             Fees = (TextView) itemView.findViewById(R.id.Fees);
             Time = (TextView) itemView.findViewById(R.id.Time);
-            save = (Button) itemView.findViewById(R.id.save);
+            save = (ImageButton) itemView.findViewById(R.id.save);
             Type = (TextView) itemView.findViewById(R.id.Specialization);
             ClinicName = (TextView) itemView.findViewById(R.id.ClinicName);
             Location = (TextView) itemView.findViewById(R.id.Location);

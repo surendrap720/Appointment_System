@@ -56,7 +56,6 @@ public class Confirm extends AppCompatActivity {
     String lattitude,longitude;
     LocationManager locationManager;
     private static final int REQUEST_LOCATION = 1;
-   int booked = 0;
    int dist = 0;
    String hospitalDistance  ="";
 
@@ -134,25 +133,45 @@ public class Confirm extends AppCompatActivity {
                 }
                 else {
 
-                    if (booked == 0) {
-
-                        addPatient();  // add patient to the appointment node which is visible to the doctor
-
-                        addtoMyAppointment(); // when patient books an appointment the details should be stored in MyAppointment node so
-                                                // that user can view his upcoming details.
-                        booked = 1;
+                       // checkAppointmentExists();
+                         // when patient books an appointment the details should be stored in MyAppointment node so
+                         addPatient();                       // that user can view his upcoming details.
+                    addtoMyAppointment();
                         Intent book = new Intent(Confirm.this, UpComing.class);
                         startActivity(book);
 
-                    } else {
-                        Toast.makeText(Confirm.this, "You have already booked an appointment", Toast.LENGTH_SHORT).show();
-                    }
 
                 }
+
+
             }
         });
 
-    }
+}
+
+  /* private void checkAppointmentExists(){
+
+        database.child("MyAppointments").child(user_id).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.hasChild(user_id)){
+
+                    addPatient();  // add patient to the appointment node which is visible to the doctor
+                    addtoMyAppointment();
+                    //Toast.makeText(Confirm.this,"You have already booked an appointment with the doctor.",Toast.LENGTH_SHORT).show();
+                }
+                else {
+
+                    Toast.makeText(Confirm.this,"You have already booked an appointment with the doctor.",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }*/
 
     private void addPatient() {
 
@@ -170,8 +189,8 @@ public class Confirm extends AppCompatActivity {
                 final  String patientName  = dataSnapshot.child("name").getValue().toString();
                 if (user != null) {
 
-                    booked = 1;
-                    putPatient(patientName,booked);
+
+                    putPatient(patientName);
 
                 }
                 else
@@ -187,7 +206,7 @@ public class Confirm extends AppCompatActivity {
 
     }
 
-    private void putPatient(final String patientName, int booked){
+    private void putPatient(final String patientName){
 
         Map newPost = new HashMap();
         newPost.put("patient_name",patientName);
@@ -214,6 +233,7 @@ public class Confirm extends AppCompatActivity {
         newPost.put("name",displayName);
         newPost.put("appointmentNumber",appointmentNumber);
         newPost.put("distance",dist);
+        newPost.put("appointmentPushKey",uid);
         database.child("MyAppointments").child(user_id).setValue(newPost);
         getAppointmentNumber();
         setAppointmentDistance();

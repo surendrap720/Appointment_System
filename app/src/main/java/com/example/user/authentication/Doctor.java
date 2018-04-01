@@ -110,7 +110,7 @@ public class Doctor extends AppCompatActivity {
                         doctorProfile.putExtra("docView",docView);
                       //  doctorProfile.putExtra("docName" ,id);
                         startActivity(doctorProfile);
-                        finish();
+                       // finish();
                     }
                 });
 

@@ -16,8 +16,9 @@ public class myAppointmentDetails {
     private String name;
     private String time ;
     private String type;
+    private String appointmentPushKey;
 
-    public myAppointmentDetails(String appointmentNumber, String avg_time, String distance, String docId, String email, String fees, String location, String mob, String name, String time, String type) {
+    public myAppointmentDetails(String appointmentNumber, String avg_time, String distance, String docId, String email, String fees, String location, String mob, String name, String time, String type, String appointmentPushKey) {
         this.appointmentNumber = appointmentNumber;
         this.avg_time = avg_time;
         this.distance = distance;
@@ -29,6 +30,16 @@ public class myAppointmentDetails {
         this.name = name;
         this.time = time;
         this.type = type;
+        this.appointmentPushKey = appointmentPushKey;
+
+    }
+
+    public String getAppointmentPushKey() {
+        return appointmentPushKey;
+    }
+
+    public void setAppointmentPushKey(String appointmentPushKey) {
+        this.appointmentPushKey = appointmentPushKey;
     }
 
     public String getAppointmentNumber() {

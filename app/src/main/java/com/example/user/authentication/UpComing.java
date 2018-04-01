@@ -17,11 +17,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,6 +40,10 @@ public class UpComing extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     DatabaseReference reference;
+    private FirebaseAuth mAuth;
+    String user_id = "";
+    String appointmentPushKey = "";
+    String docId = "";
 
 
     @Override
@@ -48,6 +54,7 @@ public class UpComing extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.RecyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mAuth = FirebaseAuth.getInstance();
 
         reference = FirebaseDatabase.getInstance().getReference().child("MyAppointments");
         FirebaseRecyclerAdapter<myAppointmentDetails, UpComing.DocViewHolder> adapter = new FirebaseRecyclerAdapter<myAppointmentDetails, UpComing.DocViewHolder>(
@@ -66,6 +73,22 @@ public class UpComing extends AppCompatActivity {
                 viewHolder.setFees(model.getFees());
                 viewHolder.setTime(model.getTime());
                 viewHolder.setDistance(model.getDistance());
+                appointmentPushKey = model.getAppointmentPushKey();
+                docId = model.getDocId();
+
+
+                viewHolder.cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        DatabaseReference cancel = FirebaseDatabase.getInstance().getReference().child("Appointment").child(docId).child(appointmentPushKey);
+                        reference.child(user_id).removeValue();
+                       // reference.child(user_id).child("appointmentNumber").removeValue();
+                        cancel.removeValue();
+                        Intent intent = new Intent(UpComing.this,Home.class);
+                        startActivity(intent);
+
+                    }
+                });
 
             }
         };
@@ -85,7 +108,8 @@ public class UpComing extends AppCompatActivity {
         TextView Fees;
         TextView Time;
         TextView Type;
-        private Button save;
+        private ImageButton save;
+        private Button cancel;
 
         //nq  TextView Id;
         // TextView Location;
@@ -101,7 +125,8 @@ public class UpComing extends AppCompatActivity {
             Fees = (TextView) itemView.findViewById(R.id.Fees);
             Time = (TextView) itemView.findViewById(R.id.Time);
             Type = (TextView) itemView.findViewById(R.id.Type);
-            save = (Button)itemView.findViewById(R.id.save);
+            save = (ImageButton) itemView.findViewById(R.id.save);
+            cancel = (Button) itemView.findViewById(R.id.cancel);
 
         }
 
