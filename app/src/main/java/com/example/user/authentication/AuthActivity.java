@@ -227,7 +227,7 @@ public class AuthActivity extends AppCompatActivity {
     private void checkUserIsDoc(){
 
         final String user_id = mAuth.getCurrentUser().getUid();
-        database.child("Doctors").addValueEventListener(new ValueEventListener() {
+        database.child("physician").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(!dataSnapshot.hasChild(user_id)){

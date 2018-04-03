@@ -173,10 +173,6 @@ public class Doctor extends AppCompatActivity {
             Experience = (TextView) itemView.findViewById(R.id.Experience);
             save = (Button)itemView.findViewById(R.id.save);
 
-        //nq    Id = (TextView) itemView.findViewById(R.id.Id);
-            //  Location = (TextView) itemView.findViewById(R.id.Location);
-
-
         }
 
         public void setName(String name) {

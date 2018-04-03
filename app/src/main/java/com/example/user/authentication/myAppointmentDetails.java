@@ -5,7 +5,7 @@ package com.example.user.authentication;
  */
 
 public class myAppointmentDetails {
-    private String appointmentNumber;
+   private int appointmentNumber;
     private String avg_time;
     private String distance;
     private String docId;
@@ -14,13 +14,11 @@ public class myAppointmentDetails {
     private String location;
     private String mob;
     private String name;
-    private String time ;
+    private String timing ;
     private String type;
-    private String appointmentPushKey;
-    private String timeRemain;
 
-    public myAppointmentDetails(String appointmentNumber, String avg_time, String distance, String docId, String email, String fees, String location, String mob, String name, String time, String type, String appointmentPushKey, String timeRemain) {
-        this.appointmentNumber = appointmentNumber;
+    public myAppointmentDetails(int appointmentNumber, String avg_time, String distance, String docId, String email, String fees, String location, String mob, String name, String timing, String type) {
+       this.appointmentNumber = appointmentNumber;
         this.avg_time = avg_time;
         this.distance = distance;
         this.docId = docId;
@@ -29,34 +27,15 @@ public class myAppointmentDetails {
         this.location = location;
         this.mob = mob;
         this.name = name;
-        this.time = time;
+        this.timing = timing;
         this.type = type;
-        this.appointmentPushKey = appointmentPushKey;
-        this.timeRemain = timeRemain;
-
     }
 
-    public String getTimeRemain() {
-        return timeRemain;
-    }
-
-    public void setTimeRemain(String timeRemain) {
-        this.timeRemain = timeRemain;
-    }
-
-    public String getAppointmentPushKey() {
-        return appointmentPushKey;
-    }
-
-    public void setAppointmentPushKey(String appointmentPushKey) {
-        this.appointmentPushKey = appointmentPushKey;
-    }
-
-    public String getAppointmentNumber() {
+    public int getAppointmentNumber() {
         return appointmentNumber;
     }
 
-    public void setAppointmentNumber(String appointmentNumber) {
+    public void setAppointmentNumber(int appointmentNumber) {
         this.appointmentNumber = appointmentNumber;
     }
 
@@ -124,12 +103,12 @@ public class myAppointmentDetails {
         this.name = name;
     }
 
-    public String getTime() {
-        return time;
+    public String getTiming() {
+        return timing;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setTiming(String timing) {
+        this.timing = timing;
     }
 
     public String getType() {

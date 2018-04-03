@@ -73,6 +73,15 @@
             android:layout_alignParentEnd="true"
             android:maxEms="10"
             android:hint="10 minutes"/>
+
+        <EditText
+            android:id="@+id/maxPatients"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:maxEms="10"
+            android:hint="10"/>
     </LinearLayout>
 
     <Button

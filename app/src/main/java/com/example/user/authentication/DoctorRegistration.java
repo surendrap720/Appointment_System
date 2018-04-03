@@ -32,6 +32,16 @@ public class DoctorRegistration extends AppCompatActivity {
     private Button Register_button;
     private Button logout_btn;
     private FirebaseAuth mAuth;
+    DatabaseReference reference;
+
+     String name = "";
+     String email ="";
+     String dob = "";
+     String mob = "";
+     String type = "";
+     String gender = "";
+     String user_id = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,23 +58,24 @@ public class DoctorRegistration extends AppCompatActivity {
         logout_btn = (Button) findViewById(R.id.logout_btn);
         radioSexGroup = (RadioGroup) findViewById(R.id.radioSexGroup);
         mAuth = FirebaseAuth.getInstance();
+        reference = FirebaseDatabase.getInstance().getReference();
 
 
         Register_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                final String name = Name.getText().toString();
-                final String email = Email.getText().toString();
-                final String dob = Dob.getText().toString();
-                final String mob = Mob.getText().toString();
-                final String type = Type.getText().toString();
-                final String gender = radioSexButton.getText().toString();
+                 name = Name.getText().toString();
+                email = Email.getText().toString();
+                dob = Dob.getText().toString();
+                mob = Mob.getText().toString();
+                type = Type.getText().toString();
+                gender = radioSexButton.getText().toString();
 
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (user != null) {
-                    String user_id = mAuth.getCurrentUser().getUid();
-                    DatabaseReference current_user_db = FirebaseDatabase.getInstance().getReference().child(type).child(user_id);
+                    user_id = mAuth.getCurrentUser().getUid();
+
                    DatabaseReference docNames = FirebaseDatabase.getInstance().getReference().child("DocNames").child(user_id).child("Name");
 
 
@@ -85,15 +96,16 @@ public class DoctorRegistration extends AppCompatActivity {
                     newPost.put("lat",null);
                     newPost.put("lon",null);
                     newPost.put("message",null);
+                    newPost.put("maxPatient",null);
 
-                    current_user_db.setValue(newPost);
+                    reference.child(type).child(user_id).setValue(newPost);
 
-                    docNames.setValue(name); // put the name of the doctor under DocNames which contains all the doctors
+                    reference.child("DoctorList").child(user_id).child("Name").setValue(name); // put the name of the doctor under DocNames which contains all the doctors
 
-                    Toast.makeText(DoctorRegistration.this, "You are successfully registered.", Toast.LENGTH_SHORT).show();
-                    Intent viewAppointment = new Intent(DoctorRegistration.this,DocHospitalDetails.class);
-                    viewAppointment.putExtra("type",type);
-                    startActivity(viewAppointment);
+                    Toast.makeText(DoctorRegistration.this, "You are successfully registered , Please tell us your details", Toast.LENGTH_SHORT).show();
+                    Intent docHospitalDetails = new Intent(DoctorRegistration.this,DocHospitalDetails.class);
+                    docHospitalDetails.putExtra("type",type);
+                    startActivity(docHospitalDetails);
                     finish();
 
 

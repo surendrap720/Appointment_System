@@ -64,6 +64,8 @@
        android:paddingBottom="10dp"
        android:drawableLeft="@drawable/mapmarker"
        android:drawablePadding="20dp"
+       android:onClick="locationClicked"
+       android:clickable="true"
        />
 
    <TextView
@@ -89,7 +91,9 @@
             android:text="7208887421"
             android:textSize="16sp"
             android:drawableLeft="@drawable/ic_local_phone_black_24dp"
-            android:drawablePadding="20dp"/>
+            android:drawablePadding="20dp"
+            android:autoLink="phone"
+            android:linksClickable="true"/>
 
    <TextView
        android:id="@+id/DisplayExp"
@@ -115,6 +119,8 @@
        android:paddingBottom="10dp"
        android:drawableLeft="@drawable/ic_email_black_24dp"
        android:drawablePadding="20dp"
+            android:onClick="emailClicked"
+            android:clickable="true"
        />
 
    <Button

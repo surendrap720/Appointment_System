@@ -108,8 +108,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             return true;
         }
 
-            return super.onOptionsItemSelected(item);
-        }
+        return super.onOptionsItemSelected(item);
+    }
 
 
     @Override

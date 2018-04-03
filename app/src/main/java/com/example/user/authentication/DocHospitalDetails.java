@@ -23,7 +23,7 @@ public class DocHospitalDetails extends AppCompatActivity {
     private EditText Fees;
     private EditText Time;
     private EditText Location;
-
+    private EditText maxPatients;
     private EditText Avg_Time;
     private EditText ClinicName;
     private EditText Experience;
@@ -31,6 +31,23 @@ public class DocHospitalDetails extends AppCompatActivity {
     private Button skip;
     private FirebaseAuth mAuth;
     private String type = "";
+    private String fees = "";
+    private String location = "";
+    private String avg_time = "";
+    private String time = "";
+    private String clinic_name = "";
+    private String exp = "";
+    private String maxPatient = "";
+    private String user_id = "";
+    private String lat = "";
+    private String lon = "";
+    private String address = "";
+    private String locationAddress = "";
+    int maximumPatient = 0;
+
+
+    private  DatabaseReference reference ;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +58,14 @@ public class DocHospitalDetails extends AppCompatActivity {
         Fees = (EditText) findViewById(R.id.Fees);
         Location = (EditText) findViewById(R.id.Location);
         Time = (EditText) findViewById(R.id.Time);
-
+        maxPatients = (EditText)findViewById(R.id.maxPatients);
         Avg_Time = (EditText) findViewById(R.id.Avg_Time);
         ClinicName = (EditText) findViewById(R.id.ClinicName);
         Experience = (EditText)findViewById(R.id.Experience);
         save = (Button) findViewById(R.id.save);
         skip = (Button) findViewById(R.id.skip);
         mAuth = FirebaseAuth.getInstance();
+        reference  = FirebaseDatabase.getInstance().getReference();
 
 
         Intent intent = getIntent();
@@ -63,32 +81,32 @@ public class DocHospitalDetails extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                final String fees = Fees.getText().toString();
-                final String location = Location.getText().toString();
-                final String time = Time.getText().toString();
-
-                final String avg_time = Avg_Time.getText().toString();
-                final String clinic_name = ClinicName.getText().toString();
-                final String exp = Experience.getText().toString();
+                 fees = Fees.getText().toString();
+                location = Location.getText().toString();
+                time = Time.getText().toString();
+                avg_time = Avg_Time.getText().toString();
+                 clinic_name = ClinicName.getText().toString();
+                 exp = Experience.getText().toString();
+                maxPatient = maxPatients.getText().toString();
+                maximumPatient = Integer.parseInt(maxPatient);
 
                 getLatLong(location);
 
-
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (user != null) {
-                    String user_id = mAuth.getCurrentUser().getUid();
-                    DatabaseReference current_user_db = FirebaseDatabase.getInstance().getReference().child(type).child(user_id);
-                   // DatabaseReference docType = FirebaseDatabase.getInstance().getReference().child(type).child(user_id).child("Name");
-                    //separate list of doctors
+                    user_id = mAuth.getCurrentUser().getUid();
+                    reference.child(type).child(user_id).child("fees").setValue(fees);
+                    reference.child(type).child(user_id).child("location").setValue(location);
+                    reference.child(type).child(user_id).child("time").setValue(time);
+                    reference.child(type).child(user_id).child("avg_time").setValue(avg_time);
+                    reference.child(type).child(user_id).child("clinic_name").setValue(clinic_name);
+                    reference.child(type).child(user_id).child("exp").setValue(exp);
+                    reference.child(type).child(user_id).child("maxPatient").setValue(maximumPatient);
 
-                   current_user_db.child("fees").setValue(fees);
-                    current_user_db.child("location").setValue(location);
-                    current_user_db.child("time").setValue(time);
-                    current_user_db.child("avg_time").setValue(avg_time);
-                    current_user_db.child("clinic_name").setValue(clinic_name);
-                    current_user_db.child("exp").setValue(exp);
-                 //  docType.setValue(name);
-
+                    Map newPost = new HashMap();
+                    newPost.put("currentPatient",0);
+                    newPost.put("maxPatient", maximumPatient);
+                    reference.child("PatientCount").child(user_id).setValue(newPost);
 
                     Toast.makeText(DocHospitalDetails.this, "Your Details are saved.", Toast.LENGTH_SHORT).show();
                     Intent viewAppointment = new Intent(DocHospitalDetails.this,ViewAppointment.class);
@@ -125,20 +143,19 @@ private void getLatLong(String address){
     private class GeocoderHandler extends Handler {
         @Override
         public void handleMessage(Message message) {
-            String locationAddress;
-            String user_id = mAuth.getCurrentUser().getUid();
+
+            user_id = mAuth.getCurrentUser().getUid();
             switch (message.what) {
                 case 1:
                     Bundle bundle = message.getData();
                     locationAddress = bundle.getString("address");
-                    String address = locationAddress;
-                    String lat = address.substring(0,10);
-                    String lon = address.substring(11);
+                    address = locationAddress;
+                    lat = address.substring(0,10);
+                    lon = address.substring(11);
 
-                   // Toast.makeText(DocHospitalDetails.this,"address is :"+lon,Toast.LENGTH_SHORT).show();
-                    DatabaseReference current_user_db = FirebaseDatabase.getInstance().getReference().child(type).child(user_id);
-                    current_user_db.child("lat").setValue(lat);
-                    current_user_db.child("lon").setValue(lon);
+
+                    reference.child(type).child(user_id).child("lat").setValue(lat);
+                    reference.child(type).child(user_id).child("lon").setValue(lon);
 
                     break;
                 default:

@@ -1,11 +1,13 @@
 package com.example.user.authentication;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -33,7 +35,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class ViewAppointment extends AppCompatActivity  {
+public class ViewAppointment extends AppCompatActivity   {
 
 
     private FirebaseAuth mAuth;
@@ -55,7 +57,6 @@ public class ViewAppointment extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setTitle("Appointment List");
         setContentView(R.layout.activity_view_appointment);
-
         start = findViewById(R.id.start_button);
         stop = findViewById(R.id.stop_button);
 
@@ -64,7 +65,7 @@ public class ViewAppointment extends AppCompatActivity  {
         mAuth = FirebaseAuth.getInstance();
         user_id = mAuth.getCurrentUser().getUid();
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Appointment").child(user_id);
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("PatientList").child(user_id);
         recyclerView = (RecyclerView) findViewById(R.id.RecyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -98,9 +99,6 @@ public class ViewAppointment extends AppCompatActivity  {
         });
 
 
-
-
-
         FirebaseRecyclerAdapter<PatientList, ViewAppointment.DocViewHolder> adapter = new FirebaseRecyclerAdapter<PatientList, ViewAppointment.DocViewHolder>(
                 PatientList.class,
                 R.layout.individual_row,
@@ -122,12 +120,6 @@ public class ViewAppointment extends AppCompatActivity  {
 
     }
 
-    private void setMessage(String impMessage){
-
-      /*  DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("D").child(user_id);
-       ref.child("message").setValue(impMessage);*/
-
-    }
 
     private void calDuration(){
        int starthour  = Integer.parseInt(startHr);
@@ -166,6 +158,8 @@ public class ViewAppointment extends AppCompatActivity  {
         startActivity(authIntent);
         finish();
     }
+
+
 
 
 }
