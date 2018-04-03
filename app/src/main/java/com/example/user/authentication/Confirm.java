@@ -59,6 +59,13 @@ public class Confirm extends AppCompatActivity {
    int dist = 0;
    String hospitalDistance  ="";
 
+   String myAppointmentPushKey = "";
+   String time="";
+   String startTime = "";
+   int intStartTime =0;
+   int averageTime =0;
+   int timeRemain =0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,11 +141,11 @@ public class Confirm extends AppCompatActivity {
                 else {
 
                        // checkAppointmentExists();
+                    addtoMyAppointment();
+                    addPatient();
+                    senToUpcoming();
                          // when patient books an appointment the details should be stored in MyAppointment node so
-                         addPatient();                       // that user can view his upcoming details.
-                    addtoMyAppointment();
-                        Intent book = new Intent(Confirm.this, UpComing.class);
-                        startActivity(book);
+
 
 
                 }
@@ -147,32 +154,12 @@ public class Confirm extends AppCompatActivity {
             }
         });
 
-}
+    }
 
-  /* private void checkAppointmentExists(){
-
-        database.child("MyAppointments").child(user_id).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(!dataSnapshot.hasChild(user_id)){
-
-                    addPatient();  // add patient to the appointment node which is visible to the doctor
-                    addtoMyAppointment();
-                    //Toast.makeText(Confirm.this,"You have already booked an appointment with the doctor.",Toast.LENGTH_SHORT).show();
-                }
-                else {
-
-                    Toast.makeText(Confirm.this,"You have already booked an appointment with the doctor.",Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }*/
-
+    private void senToUpcoming(){
+        Intent intent = new Intent(Confirm.this,UpComing.class);
+        startActivity(intent);
+    }
     private void addPatient() {
 
         getUserName();
@@ -212,8 +199,9 @@ public class Confirm extends AppCompatActivity {
         newPost.put("patient_name",patientName);
         database.child("Appointment").child(docId).push();
         uid = database.child("Appointment").child(docId).push().getKey();
-        Toast.makeText(Confirm.this,"id pushed  is"+uid,Toast.LENGTH_SHORT).show();
+        database.child("MyAppointments").child(user_id).child(myAppointmentPushKey).child("appointmentPushKey").setValue(uid);
         database.child("Appointment").child(docId).child(uid).setValue(newPost);
+
 
     }
 
@@ -232,13 +220,48 @@ public class Confirm extends AppCompatActivity {
         newPost.put("fees",displayFees);
         newPost.put("name",displayName);
         newPost.put("appointmentNumber",appointmentNumber);
-        newPost.put("distance",dist);
+        newPost.put("distance",hospitalDistance);
         newPost.put("appointmentPushKey",uid);
-        database.child("MyAppointments").child(user_id).setValue(newPost);
+        newPost.put("timeRemain",null);
+        database.child("MyAppointments").child(user_id).push();
+        myAppointmentPushKey = database.child("MyAppointments").child(user_id).push().getKey();
+        database.child("MyAppointments").child(user_id).child(myAppointmentPushKey).setValue(newPost);
         getAppointmentNumber();
+
         setAppointmentDistance();
+        getTime();
+
+
+
 
     }
+
+    private void getTime(){
+
+       startTime =  displayTime.substring(0,1);
+       intStartTime = Integer.parseInt(startTime);
+       averageTime = Integer.parseInt(displayAvgTime);
+
+
+        database.child("MyAppointments").child(user_id).child(myAppointmentPushKey).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                appointmentNumber = dataSnapshot.child("appointmentNumber").getValue().toString();
+                timeRemain =2*averageTime;
+                time = String.valueOf(timeRemain);
+                database.child("MyAppointments").child(user_id).child(myAppointmentPushKey).child("timeRemain").setValue(time);
+
+                Toast.makeText(Confirm.this,"Time "+time,Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
 
     private void getAppointmentNumber(){
 
@@ -248,8 +271,8 @@ public class Confirm extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 int numberOfPatients = (int) dataSnapshot.getChildrenCount();
                 appointmentNumber = String.valueOf(numberOfPatients);
-                Toast.makeText(Confirm.this, "Appointment Number is "+appointmentNumber,Toast.LENGTH_SHORT ).show();
-                database.child("MyAppointments").child(user_id).child("appointmentNumber").setValue(appointmentNumber);
+               // Toast.makeText(Confirm.this, "Appointment Number is "+appointmentNumber,Toast.LENGTH_SHORT ).show();
+                database.child("MyAppointments").child(user_id).child(myAppointmentPushKey).child("appointmentNumber").setValue(appointmentNumber);
 
             }
 
@@ -339,7 +362,7 @@ public class Confirm extends AppCompatActivity {
                 dist = (int)distance;
                 hospitalDistance = String.valueOf(dist);
 
-               database.child("MyAppointments").child(user_id).child("distance").setValue(hospitalDistance);
+               database.child("MyAppointments").child(user_id).child(myAppointmentPushKey).child("distance").setValue(hospitalDistance);
                 // Toast.makeText(UpComing.this,"distance is: "+dist,Toast.LENGTH_SHORT).show();
             }
 

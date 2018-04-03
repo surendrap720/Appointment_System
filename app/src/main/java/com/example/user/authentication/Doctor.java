@@ -127,6 +127,7 @@ public class Doctor extends AppCompatActivity {
                         newPost.put("fees",fees);
                         newPost.put("time",time);
                         ref.setValue(newPost);
+                        Toast.makeText(Doctor.this,"Doctor has been saved as favourites",Toast.LENGTH_SHORT).show();
 
                     }
                 });
@@ -136,7 +137,7 @@ public class Doctor extends AppCompatActivity {
 
 
         recyclerView.setAdapter(adapter);
-
+        adapter.notifyDataSetChanged();
 
 
 

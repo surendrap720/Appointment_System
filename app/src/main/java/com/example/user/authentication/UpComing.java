@@ -44,6 +44,8 @@ public class UpComing extends AppCompatActivity {
     String user_id = "";
     String appointmentPushKey = "";
     String docId = "";
+    String remainingTime = "";
+    String startTime = "";
 
 
     @Override
@@ -55,8 +57,9 @@ public class UpComing extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAuth = FirebaseAuth.getInstance();
+        user_id = mAuth.getCurrentUser().getUid();
 
-        reference = FirebaseDatabase.getInstance().getReference().child("MyAppointments");
+        reference = FirebaseDatabase.getInstance().getReference().child("MyAppointments").child(user_id);
         FirebaseRecyclerAdapter<myAppointmentDetails, UpComing.DocViewHolder> adapter = new FirebaseRecyclerAdapter<myAppointmentDetails, UpComing.DocViewHolder>(
                 myAppointmentDetails.class,
                 R.layout.myappointments,
@@ -71,19 +74,22 @@ public class UpComing extends AppCompatActivity {
                 viewHolder.setType(model.getType());
                 viewHolder.setLocation(model.getLocation());
                 viewHolder.setFees(model.getFees());
-                viewHolder.setTime(model.getTime());
+              //  viewHolder.setTime(model.getTime());
+                startTime =  model.getTime().substring(0,1);
+
                 viewHolder.setDistance(model.getDistance());
+                viewHolder.setTimeRemain(model.getTimeRemain());
                 appointmentPushKey = model.getAppointmentPushKey();
                 docId = model.getDocId();
 
 
-                viewHolder.cancel.setOnClickListener(new View.OnClickListener() {
+               viewHolder.cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        DatabaseReference cancel = FirebaseDatabase.getInstance().getReference().child("Appointment").child(docId).child(appointmentPushKey);
-                        reference.child(user_id).removeValue();
-                       // reference.child(user_id).child("appointmentNumber").removeValue();
-                        cancel.removeValue();
+                        DatabaseReference cancelAppointment = FirebaseDatabase.getInstance().getReference().child("Appointment").child(docId).child(appointmentPushKey);
+                        reference.removeValue();
+                        cancelAppointment.removeValue();
+                        Toast.makeText(UpComing.this,"Appointment has been cancelled",Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(UpComing.this,Home.class);
                         startActivity(intent);
 
@@ -108,6 +114,7 @@ public class UpComing extends AppCompatActivity {
         TextView Fees;
         TextView Time;
         TextView Type;
+      //  TextView timeRemaining;
         private ImageButton save;
         private Button cancel;
 
@@ -125,6 +132,7 @@ public class UpComing extends AppCompatActivity {
             Fees = (TextView) itemView.findViewById(R.id.Fees);
             Time = (TextView) itemView.findViewById(R.id.Time);
             Type = (TextView) itemView.findViewById(R.id.Type);
+        //    timeRemaining = (TextView) itemView.findViewById(R.id.timeRemaining);
             save = (ImageButton) itemView.findViewById(R.id.save);
             cancel = (Button) itemView.findViewById(R.id.cancel);
 
@@ -141,10 +149,10 @@ public class UpComing extends AppCompatActivity {
         }
 
 
-        public void setTime(String time) {
+       /* public void setTime(String time) {
 
             Time.setText("Time: " + time);
-        }
+        }*/
 
         public void setType(String type) {
             Type.setText(type);
@@ -163,6 +171,11 @@ public class UpComing extends AppCompatActivity {
 
         public void setDistance(String distance) {
             Distance.setText(distance);
+        }
+
+        public void setTimeRemain(String timeRemain) {
+
+            Time.setText("2hr + "+timeRemain);
         }
     }
 
