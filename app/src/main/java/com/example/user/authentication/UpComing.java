@@ -42,6 +42,46 @@ public class UpComing extends AppCompatActivity {
     DatabaseReference reference;
     private FirebaseAuth mAuth;
     String user_id = "";
+    String count = "";
+    int counter = 0;
+
+    @Override
+    protected void onStart() {
+
+        super.onStart();
+
+        reference = FirebaseDatabase.getInstance().getReference().child("Appointments").child(user_id);
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+              counter = (int) dataSnapshot.getChildrenCount();
+              if(counter==0){
+
+                  callHome();
+              }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void callHome(){
+        new android.support.v7.app.AlertDialog.Builder(this)
+                .setTitle(" No Appointment Booked")
+                .setMessage("Would you like to book an Appointment ?")
+                .setNegativeButton(android.R.string.no, null)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        Intent intentHome = new Intent(UpComing.this,Home.class);
+                        startActivity(intentHome);
+                        finish();
+                    }
+                }).create().show();
+    }
 
 
     @Override
@@ -59,6 +99,7 @@ public class UpComing extends AppCompatActivity {
 
         reference = FirebaseDatabase.getInstance().getReference().child("Appointments").child(user_id);
 
+        checkAppointmentBooked();
         FirebaseRecyclerAdapter<myAppointmentDetails, UpComing.DocViewHolder> adapter = new FirebaseRecyclerAdapter<myAppointmentDetails, UpComing.DocViewHolder>(
                 myAppointmentDetails.class,
                 R.layout.myappointments,
@@ -68,13 +109,13 @@ public class UpComing extends AppCompatActivity {
         ) {
             @Override
             protected void populateViewHolder(final UpComing.DocViewHolder viewHolder, final myAppointmentDetails model, int position) {
-                        viewHolder.setAppointmentNumber(model.getAppointmentNumber());
-                        viewHolder.setName(model.getName());
-                        viewHolder.setDistance(model.getDistance());
-                        viewHolder.setLocation(model.getLocation());
-                        viewHolder.setFees(model.getFees());
-                        viewHolder.setTime(model.getTiming());
-                        viewHolder.setType(model.getType());
+                viewHolder.setAppointmentNumber(model.getAppointmentNumber());
+                viewHolder.setName(model.getName());
+                viewHolder.setDistance(model.getDistance());
+                viewHolder.setLocation(model.getLocation());
+                viewHolder.setFees(model.getFees());
+                viewHolder.setTime(model.getTiming());
+                viewHolder.setType(model.getType());
 
 
 
@@ -83,6 +124,12 @@ public class UpComing extends AppCompatActivity {
 
 
         recyclerView.setAdapter(adapter);
+
+
+    }
+
+    private void checkAppointmentBooked(){
+
 
     }
 
@@ -146,8 +193,12 @@ public class UpComing extends AppCompatActivity {
             Type.setText(type);
         }
     }
+    @Override
+    public void onBackPressed() {
+
+        Intent doctor = new Intent(UpComing.this,Home.class);
+        startActivity(doctor);
+    }
+
 
 }
-
-
-

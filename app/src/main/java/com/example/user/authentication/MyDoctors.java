@@ -1,5 +1,6 @@
 package com.example.user.authentication;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -32,6 +33,45 @@ public class MyDoctors extends AppCompatActivity {
     DatabaseReference reference;
     String user_id = "";
     String doctorId = "";
+    int counter;
+
+    @Override
+    protected void onStart() {
+
+        super.onStart();
+
+        reference = FirebaseDatabase.getInstance().getReference().child("MyDoctors").child(user_id);
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                counter = (int) dataSnapshot.getChildrenCount();
+                if(counter==0){
+
+                    callHome();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void callHome(){
+        new android.support.v7.app.AlertDialog.Builder(this)
+                .setTitle("No Favourite Doctors.")
+                .setMessage("Would you like to add favourite doctors ?")
+                .setNegativeButton(android.R.string.no, null)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        Intent intentHome = new Intent(MyDoctors.this,Home.class);
+                        startActivity(intentHome);
+                    }
+                }).create().show();
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

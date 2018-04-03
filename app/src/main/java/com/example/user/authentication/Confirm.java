@@ -69,6 +69,108 @@ public class Confirm extends AppCompatActivity {
    int currentPatientCount = 0;
    int maxPatient = 0;
 
+   @Override
+   protected void onStart() {
+
+       super.onStart();
+       Intent intent = getIntent();
+       if(intent != null&& intent.getExtras()!=null) {
+           docId = intent.getExtras().getString("docId", "");
+           docView = intent.getExtras().getString("docView", "");
+       }
+
+       database = FirebaseDatabase.getInstance().getReference();
+
+       database.child("PatientCount").child(docId).addValueEventListener(new ValueEventListener() {
+           @Override
+           public void onDataChange(DataSnapshot dataSnapshot) {
+               currentPatientCount = dataSnapshot.child("currentPatient").getValue(Integer.class);
+               maxPatient = dataSnapshot.child("maxPatient").getValue(Integer.class);
+
+               if(currentPatientCount==maxPatient){
+
+                   callPatientFull();
+
+
+               }
+           }
+
+           @Override
+           public void onCancelled(DatabaseError databaseError) {
+
+           }
+       });
+
+       database.child("Appointments").child(user_id).addValueEventListener(new ValueEventListener() {
+           @Override
+           public void onDataChange(DataSnapshot dataSnapshot) {
+               if(dataSnapshot.hasChild(docId)){
+
+                   callAppointmentBooked();
+
+               }
+           }
+
+           @Override
+           public void onCancelled(DatabaseError databaseError) {
+
+           }
+       });
+
+
+   }
+
+   private void callAppointmentBooked(){
+
+       new AlertDialog.Builder(this)
+               .setTitle("Appointments Already Booked")
+               .setMessage("Would you like to see your appointment details ?")
+               .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                   @Override
+                   public void onClick(DialogInterface dialogInterface, int i) {
+                       Intent intent = new Intent(Confirm.this,Home.class);
+                       startActivity(intent);
+                       finish();
+                   }
+               })
+               .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                   public void onClick(DialogInterface arg0, int arg1) {
+                       Intent intent = new Intent(Confirm.this,UpComing.class);
+                       startActivity(intent);
+                       finish();
+
+                   }
+               }).create().show();
+
+   }
+
+   private void callPatientFull(){
+
+       new AlertDialog.Builder(this)
+               .setTitle("Appointments Full")
+               .setMessage("Would you like to see another doctor ?")
+               .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                   @Override
+                   public void onClick(DialogInterface dialogInterface, int i) {
+                       Intent intent = new Intent(Confirm.this,Home.class);
+                       startActivity(intent);
+                       finish();
+                   }
+               })
+               .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                   public void onClick(DialogInterface arg0, int arg1) {
+                     Intent intent = new Intent(Confirm.this,Doctor.class);
+                     intent.putExtra("physician",docView);
+                     startActivity(intent);
+                     finish();
+
+                   }
+               }).create().show();
+
+   }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,14 +180,14 @@ public class Confirm extends AppCompatActivity {
 
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
 
-        DisplayName = (TextView)findViewById(R.id.DisplayName);
-        DisplayFees = (TextView)findViewById(R.id.DisplayFees);
-        DisplayLocation = (TextView)findViewById(R.id.DisplayLocation);
-        DisplayTime = (TextView)findViewById(R.id.DisplayTime);
-        DisplayContact = (TextView)findViewById(R.id.DisplayContact);
-        DisplayExp = (TextView)findViewById(R.id.DisplayExp);
-        DisplayEmail = (TextView)findViewById(R.id.DisplayEmail);
-        book = (Button)findViewById(R.id.book);
+        DisplayName = (TextView) findViewById(R.id.DisplayName);
+        DisplayFees = (TextView) findViewById(R.id.DisplayFees);
+        DisplayLocation = (TextView) findViewById(R.id.DisplayLocation);
+        DisplayTime = (TextView) findViewById(R.id.DisplayTime);
+        DisplayContact = (TextView) findViewById(R.id.DisplayContact);
+        DisplayExp = (TextView) findViewById(R.id.DisplayExp);
+        DisplayEmail = (TextView) findViewById(R.id.DisplayEmail);
+        book = (Button) findViewById(R.id.book);
         mAuth = FirebaseAuth.getInstance();
         user_id = mAuth.getCurrentUser().getUid();
 
@@ -93,34 +195,34 @@ public class Confirm extends AppCompatActivity {
         database = FirebaseDatabase.getInstance().getReference();
 
         Intent intent = getIntent();
-        if(intent != null&& intent.getExtras()!=null) {
+        if (intent != null && intent.getExtras() != null) {
             docId = intent.getExtras().getString("docId", "");
             docView = intent.getExtras().getString("docView", "");
 
         }
 
-       database.child(docView).child(docId).addValueEventListener(new ValueEventListener() {
+        database.child(docView).child(docId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                displayName  = dataSnapshot.child("name").getValue().toString();
-                displayFees  = dataSnapshot.child("fees").getValue().toString();
-                displayLocation  = dataSnapshot.child("location").getValue().toString();
+                displayName = dataSnapshot.child("name").getValue().toString();
+                displayFees = dataSnapshot.child("fees").getValue().toString();
+                displayLocation = dataSnapshot.child("location").getValue().toString();
                 displayTime = dataSnapshot.child("time").getValue().toString();
-                displayContact  = dataSnapshot.child("mob").getValue().toString();
-                String displayExp  = dataSnapshot.child("exp").getValue().toString();
-                displayType  = dataSnapshot.child("type").getValue().toString();
+                displayContact = dataSnapshot.child("mob").getValue().toString();
+                String displayExp = dataSnapshot.child("exp").getValue().toString();
+                displayType = dataSnapshot.child("type").getValue().toString();
                 displayAvgTime = dataSnapshot.child("avg_time").getValue().toString();
                 lat = dataSnapshot.child("lat").getValue().toString();
                 lon = dataSnapshot.child("lon").getValue().toString();
-                displayEmail  = dataSnapshot.child("email").getValue().toString();
+                displayEmail = dataSnapshot.child("email").getValue().toString();
 
-                DisplayName.setText("Dr. "+displayName);
-                DisplayFees.setText("Rs. "+displayFees);
+                DisplayName.setText("Dr. " + displayName);
+                DisplayFees.setText("Rs. " + displayFees);
                 DisplayLocation.setText(displayLocation);
-                DisplayTime.setText(displayTime+" pm");
+                DisplayTime.setText(displayTime + " pm");
                 DisplayContact.setText(displayContact);
-                DisplayExp.setText(displayExp+" years");
+                DisplayExp.setText(displayExp + " years");
                 DisplayEmail.setText(displayEmail);
 
 
@@ -133,114 +235,60 @@ public class Confirm extends AppCompatActivity {
         });
 
 
-
-
-       book.setOnClickListener(new View.OnClickListener() {
+        book.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                checkAppointmentAvailable();
+                FirebaseUser currentUser = mAuth.getCurrentUser();
 
-                if(currentPatientCount<maxPatient) {
+                if (currentUser == null) {   // if user doesn't exist he is not allowed to book an appointment
+                    Toast.makeText(Confirm.this, "You need to login first", Toast.LENGTH_SHORT).show();
+                    Intent authIntent = new Intent(Confirm.this, AuthActivity.class);
+                    startActivity(authIntent);
+                    finish();
+                } else {
 
-                    FirebaseUser currentUser = mAuth.getCurrentUser();
+                    database.child("PatientCount").child(docId).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            currentPatientCount = dataSnapshot.child("currentPatient").getValue(Integer.class);
+                            maxPatient = dataSnapshot.child("maxPatient").getValue(Integer.class);
 
-                    if (currentUser == null) {   // if user doesn't exist he is not allowed to book an appointment
-                        Toast.makeText(Confirm.this, "You need to login first", Toast.LENGTH_SHORT).show();
-                        Intent authIntent = new Intent(Confirm.this, AuthActivity.class);
-                        startActivity(authIntent);
-                        finish();
-                    } else {
+                            if(currentPatientCount==maxPatient){
+                                Toast.makeText(Confirm.this,"Appointments are full",Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(Confirm.this,Home.class);
+                                startActivity(intent);
+                                finish();
 
-                        database.child("PatientList").child(docId).addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                if (!dataSnapshot.hasChild(user_id)) {
-                                    addMyAppointment();
-                                    addPatient();
-                                    senToUpcoming();
-
-                                } else {
-
-                                    NotificationCompat.Builder builer = new  NotificationCompat.Builder(Confirm.this);
-                                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("prachi.wa"));
-                                    PendingIntent pendingIntent = PendingIntent.getActivity(Confirm.this, 01, intent, 0);
-                                    builer.setContentIntent(pendingIntent);
-                                    builer.setDefaults(Notification.DEFAULT_ALL);
-                                    builer.setContentTitle("Notification title here");
-                                    builer.setSmallIcon(R.mipmap.ic_launcher);
-                                    builer.setContentText("Your Appointment number is" + currentPatientCount +
-                                            "Reach by 4p.m");
-                                    NotificationManager notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-                                    notificationManager.notify (001,builer.build());
-
-
-                                    Toast.makeText(Confirm.this, "You have already booked an appointment", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
 
                             }
-                        });
+                            else {
+
+                                addMyAppointment();
+                                addPatient();
+                                senToUpcoming();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
 
 
-                    }
 
                 }
-                else{
 
-                    NotificationCompat.Builder builer = new  NotificationCompat.Builder(Confirm.this);
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("prachi.wa"));
-                    PendingIntent pendingIntent = PendingIntent.getActivity(Confirm.this, 01, intent, 0);
-                    builer.setContentIntent(pendingIntent);
-                    builer.setDefaults(Notification.DEFAULT_ALL);
-                    builer.setContentTitle("Real Time Appointment System");
-                    builer.setSmallIcon(R.drawable.stethoscope);
-                    builer.setContentText("Appointments are full there are " + currentPatientCount + " patients");
-                    NotificationManager notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-                    notificationManager.notify (001,builer.build());
 
-                    Toast.makeText(Confirm.this, "Appointments are full " + currentPatientCount, Toast.LENGTH_SHORT).show();
-                }
             }
         });
 
-
     }
 
-    private void checkAppointmentAvailable(){
-
-        database.child("PatientCount").child(docId).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                currentPatientCount = dataSnapshot.child("currentPatient").getValue(Integer.class);
-                maxPatient = dataSnapshot.child("maxPatient").getValue(Integer.class);
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
 
 
     private void senToUpcoming(){
-
-        NotificationCompat.Builder builer = new  NotificationCompat.Builder(Confirm.this);
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("prachi.wa"));
-        PendingIntent pendingIntent = PendingIntent.getActivity(Confirm.this, 01, intent, 0);
-        builer.setContentIntent(pendingIntent);
-        builer.setDefaults(Notification.DEFAULT_ALL);
-        builer.setContentTitle("Real Time Appointment System");
-        builer.setSmallIcon(R.drawable.stethoscope);
-        builer.setContentText("Appointments are full there are " + appointmentNumber + " patients");
-        NotificationManager notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.notify (001,builer.build());
 
         Intent intent1 = new Intent(Confirm.this,UpComing.class);
         startActivity(intent1);
@@ -300,9 +348,9 @@ public class Confirm extends AppCompatActivity {
         newPost.put("location",displayLocation);
         newPost.put("fees",displayFees);
         newPost.put("name",displayName);
-        newPost.put("appointmentNumber",0);
-        newPost.put("distance",hospitalDistance);
-        newPost.put("timeRemain",null);
+        newPost.put("appointmentNumber",0); // will be calculated later and updated
+        newPost.put("distance",hospitalDistance); // will be calculated later and updated
+        newPost.put("timeRemain",null);     // will be calculated later and updated
         database.child("Appointments").child(user_id).child(docId).setValue(newPost);
         getAppointmentNumber();
         setAppointmentDistance();
@@ -318,6 +366,7 @@ public class Confirm extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                currentPatientCount =  dataSnapshot.child("currentPatient").getValue(Integer.class);
 
+
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -327,6 +376,18 @@ public class Confirm extends AppCompatActivity {
         currentPatientCount = currentPatientCount+1;
         database.child("Appointments").child(user_id).child(docId).child("appointmentNumber").setValue(currentPatientCount);
         database.child("PatientCount").child(docId).child("currentPatient").setValue(currentPatientCount);
+
+        NotificationCompat.Builder builer = new  NotificationCompat.Builder(Confirm.this);
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("prachi.wa"));
+        PendingIntent pendingIntent = PendingIntent.getActivity(Confirm.this, 01, intent, 0);
+        builer.setContentIntent(pendingIntent);
+        builer.setDefaults(Notification.DEFAULT_ALL);
+        builer.setContentTitle("Real Time Appointment System");
+        builer.setSmallIcon(R.drawable.stethoscope);
+        builer.setContentText("Appointments number  " + currentPatientCount);
+        NotificationManager notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.notify (001,builer.build());
+
 
     }
 

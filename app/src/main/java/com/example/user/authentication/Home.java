@@ -78,27 +78,6 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     }
 
 
-  /*  public void open(View view){
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("Are you sure, You wanted to make decision");
-                alertDialogBuilder.setPositiveButton("yes",
-                        new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface arg0, int arg1) {
-                    Toast.makeText(Home.this,"You clicked yes button",Toast.LENGTH_LONG).show();
-                }
-            });
-
-        alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    finish();
-                }
-        });
-
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
-    }*/
 
 
     @Override
@@ -117,9 +96,22 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
         int id = item.getItemId();
         if(id==R.id.Logout){
-            mAuth.signOut();
-            sendToAuth();
-            Toast.makeText(this,"You have logged out",Toast.LENGTH_SHORT).show();
+
+            new AlertDialog.Builder(this)
+                    .setTitle("Logout ?")
+                    .setMessage("Are you sure you want to logout ?")
+                    .setNegativeButton(android.R.string.no, null)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            mAuth.signOut();
+                            sendToAuth();
+
+                        }
+                    }).create().show();
+
+
+
         }
         else if(id==R.id.MyProfile){
 
@@ -173,6 +165,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         return false;
     }
     private void sendToAuth() {
+        Toast.makeText(this,"You have successfully logged out",Toast.LENGTH_SHORT).show();
         Intent authIntent = new Intent(Home.this, AuthActivity.class);
         authIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(authIntent);
