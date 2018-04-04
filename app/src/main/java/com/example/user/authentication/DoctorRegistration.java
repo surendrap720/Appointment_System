@@ -3,11 +3,13 @@ package com.example.user.authentication;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -65,49 +67,60 @@ public class DoctorRegistration extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+
+
                  name = Name.getText().toString();
                 email = Email.getText().toString();
                 dob = Dob.getText().toString();
                 mob = Mob.getText().toString();
                 type = Type.getText().toString();
                 gender = radioSexButton.getText().toString();
-
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if (user != null) {
-                    user_id = mAuth.getCurrentUser().getUid();
 
-                   DatabaseReference docNames = FirebaseDatabase.getInstance().getReference().child("DocNames").child(user_id).child("Name");
+                if(!TextUtils.isEmpty(name)||!TextUtils.isEmpty(email)||!TextUtils.isEmpty(dob)||!TextUtils.isEmpty(mob)||!TextUtils.isEmpty(type)||!TextUtils.isEmpty(gender)) {
 
 
-                    Map newPost = new HashMap();
-                    newPost.put("name", name);
-                    newPost.put("email", email);
-                    newPost.put("dob", dob);
-                    newPost.put("mob", mob);
-                    newPost.put("gender", gender);
-                    newPost.put("id",user_id);
-                    newPost.put("fees", null);
-                    newPost.put("location", null);
-                    newPost.put("time", null);
-                    newPost.put("type",type);
-                    newPost.put("avg_time",null);
-                    newPost.put("clinic_name",null);
-                    newPost.put("exp",null);
-                    newPost.put("lat",null);
-                    newPost.put("lon",null);
-                    newPost.put("message",null);
-                    newPost.put("maxPatient",null);
+                    if (user != null) {
+                        user_id = mAuth.getCurrentUser().getUid();
 
-                    reference.child(type).child(user_id).setValue(newPost);
+                        DatabaseReference docNames = FirebaseDatabase.getInstance().getReference().child("DocNames").child(user_id).child("Name");
 
-                    reference.child("DoctorList").child(user_id).child("Name").setValue(name); // put the name of the doctor under DocNames which contains all the doctors
 
-                    Toast.makeText(DoctorRegistration.this, "You are successfully registered , Please tell us your details", Toast.LENGTH_SHORT).show();
-                    Intent docHospitalDetails = new Intent(DoctorRegistration.this,DocHospitalDetails.class);
-                    docHospitalDetails.putExtra("type",type);
-                    startActivity(docHospitalDetails);
-                    finish();
+                        Map newPost = new HashMap();
+                        newPost.put("name", name);
+                        newPost.put("email", email);
+                        newPost.put("dob", dob);
+                        newPost.put("mob", mob);
+                        newPost.put("gender", gender);
+                        newPost.put("id", user_id);
+                        newPost.put("fees", null);
+                        newPost.put("location", null);
+                        newPost.put("time", null);
+                        newPost.put("type", type);
+                        newPost.put("avg_time", null);
+                        newPost.put("clinic_name", null);
+                        newPost.put("exp", null);
+                        newPost.put("lat", null);
+                        newPost.put("lon", null);
+                        newPost.put("message", null);
+                        newPost.put("maxPatient", null);
 
+                        reference.child(type).child(user_id).setValue(newPost);
+
+                        reference.child("DoctorList").child(user_id).child("Name").setValue(name); // put the name of the doctor under DocNames which contains all the doctors
+
+                        Toast.makeText(DoctorRegistration.this, "You are successfully registered , Please tell us your details", Toast.LENGTH_SHORT).show();
+                        Intent docHospitalDetails = new Intent(DoctorRegistration.this, DocHospitalDetails.class);
+                        docHospitalDetails.putExtra("type", type);
+                        startActivity(docHospitalDetails);
+                        finish();
+
+
+                    }
+                }
+
+                else{
+                    Toast.makeText(DoctorRegistration.this, "Some of the fields are empty", Toast.LENGTH_SHORT).show();
 
                 }
             }

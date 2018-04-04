@@ -97,10 +97,17 @@ public class MainActivity extends AppCompatActivity {
                 final String gender = radioSexButton.getText().toString();
 
                 //details are empty
-                if(TextUtils.isEmpty(email)||TextUtils.isEmpty(name)||TextUtils.isEmpty(dob)||TextUtils.isEmpty(mob)||TextUtils.isEmpty(gender)){
+                if((name.length()==0)||(email.length()==0)||(dob.length()==0)||mob.length()==0){
                     Toast.makeText(MainActivity.this,"Fields are Empty",Toast.LENGTH_SHORT).show();
                 }
-                    else {
+
+                else if(mob.length()!=0){
+
+                    Toast.makeText(MainActivity.this,"Invalid ContactNumber",Toast.LENGTH_SHORT).show();
+
+
+                }
+                else{
 
                     Query emailquery = FirebaseDatabase.getInstance().getReference().child("User").orderByChild("email").equalTo(email);
                     emailquery.addListenerForSingleValueEvent(new ValueEventListener() {
