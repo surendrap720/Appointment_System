@@ -66,7 +66,7 @@ public class AuthActivity extends AppCompatActivity {
         error_textview = (TextView) findViewById(R.id.error_textview);
         Text = (TextView) findViewById(R.id.Text);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        final  String phone =contact_edit_text.getText().toString();
+        final  String phone = contact_edit_text.getText().toString();
 
 
         mAuth = FirebaseAuth.getInstance(); //firebase instance
@@ -89,31 +89,59 @@ public class AuthActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) { //when verify button is clicked
                 String phone_number = contact_edit_text.getText().toString();
-
-                if(!TextUtils.isEmpty(phone_number)) {
-                    if (btnType == 0) {
-
-                        progressBar.setVisibility(View.VISIBLE);
-                        Text.setText("Waiting for OTP");
-                        PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                                phone_number,        // Phone number to verify
-                                60,                 // Timeout duration
-                                TimeUnit.SECONDS,   // Unit of timeout
-                                AuthActivity.this,               // Activity (for callback binding)
-                                mCallbacks
-                        );        // OnVerificationStateChangedCallbacks
+                int len = phone_number.length();
 
 
-                    } else {
-                        verify_btn.setEnabled(false);
-                        String verificationCode = code_edit_text.getText().toString();
-                        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, verificationCode);
-                        signInWithPhoneAuthCredential(credential);
+                    if (!TextUtils.isEmpty(phone_number)) {
+
+                       if(len==10) {
+
+
+                           if (btnType == 0) {
+
+                               progressBar.setVisibility(View.VISIBLE);
+                               Text.setText("Waiting for OTP");
+                               PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                                       phone_number,        // Phone number to verify
+                                       60,                 // Timeout duration
+                                       TimeUnit.SECONDS,   // Unit of timeout
+                                       AuthActivity.this,               // Activity (for callback binding)
+                                       mCallbacks
+                               );        // OnVerificationStateChangedCallbacks
+
+
+                           } else
+
+                           {
+                               verify_btn.setEnabled(false);
+                               String verificationCode = code_edit_text.getText().toString();
+                               int lenght = verificationCode.length();
+                               if(lenght==6) {
+                                   PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, verificationCode);
+                                   signInWithPhoneAuthCredential(credential);
+                               }
+                               else{
+
+                                   Toast.makeText(AuthActivity.this, "Invalid OTP , Please check your OTP ", Toast.LENGTH_SHORT).show();
+                                        verify_btn.setEnabled(true);
+
+                               }
+                           }
+                       }
+                       else{
+
+                           Toast.makeText(AuthActivity.this, "Invalid Contact Number , Please enter valid contact number", Toast.LENGTH_SHORT).show();
+
+                       }
                     }
-                }
-                else{
-                    Toast.makeText(AuthActivity.this,"Please enter phone number",Toast.LENGTH_SHORT).show();
-                }
+
+                    else
+
+                    {
+                        Toast.makeText(AuthActivity.this, "Please enter phone number", Toast.LENGTH_SHORT).show();
+                    }
+
+
             }
         });
 
@@ -250,6 +278,12 @@ public class AuthActivity extends AppCompatActivity {
 
             }
         });
+    }
+    @Override
+    public void onBackPressed(){
+
+        finish();
+
     }
 }
 

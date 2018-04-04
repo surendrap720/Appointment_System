@@ -42,7 +42,6 @@ public class ViewAppointment extends AppCompatActivity   {
     private RecyclerView recyclerView;
     private Button start;
     private Button stop;
-
     private Button send_button;
     private EditText messageEditText;
     private String startFormat="";
@@ -54,6 +53,7 @@ public class ViewAppointment extends AppCompatActivity   {
     private String user_id="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         getSupportActionBar().setTitle("Appointment List");
         setContentView(R.layout.activity_view_appointment);
@@ -76,7 +76,7 @@ public class ViewAppointment extends AppCompatActivity   {
             public void onClick(View view) {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh-mm");
                 startFormat = simpleDateFormat.format(new Date());
-                startHr=startFormat.substring(0,2);
+                startHr = startFormat.substring(0,2);
                 startMm = startFormat.substring(3);
 
             }
