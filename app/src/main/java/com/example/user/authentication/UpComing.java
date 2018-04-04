@@ -2,14 +2,19 @@ package com.example.user.authentication;
 
 import android.*;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.provider.*;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -42,8 +47,15 @@ public class UpComing extends AppCompatActivity {
     DatabaseReference reference;
     private FirebaseAuth mAuth;
     String user_id = "";
-    String count = "";
+    int startTime = 0;
     int counter = 0;
+    int appointmentNumber = 0;
+    int average = 0;
+    int rechingTime = 0;
+    String reachTime1 ="";
+    int reachHour = 0;
+    int reachMinute = 0;
+
 
     @Override
     protected void onStart() {
@@ -99,7 +111,7 @@ public class UpComing extends AppCompatActivity {
 
         reference = FirebaseDatabase.getInstance().getReference().child("Appointments").child(user_id);
 
-        checkAppointmentBooked();
+
         FirebaseRecyclerAdapter<myAppointmentDetails, UpComing.DocViewHolder> adapter = new FirebaseRecyclerAdapter<myAppointmentDetails, UpComing.DocViewHolder>(
                 myAppointmentDetails.class,
                 R.layout.myappointments,
@@ -110,11 +122,37 @@ public class UpComing extends AppCompatActivity {
             @Override
             protected void populateViewHolder(final UpComing.DocViewHolder viewHolder, final myAppointmentDetails model, int position) {
                 viewHolder.setAppointmentNumber(model.getAppointmentNumber());
+                appointmentNumber = model.getAppointmentNumber();
+                average = model.getAvg_time();
+                startTime = Integer.parseInt(model.getTiming().substring(0,1));
+                rechingTime  = appointmentNumber*average;
+                reachHour = rechingTime/60;
+                reachMinute = rechingTime%60-average;
+                if(reachHour>=1){
+                   startTime = startTime+reachHour;
+
+                }
+                else{
+
+                }
+                reachTime1 = String.valueOf(rechingTime);
+                viewHolder.setTiming("Time: "+startTime+":"+reachMinute+" pm");
+                Toast.makeText(UpComing.this,"Time: "+startTime+":"+reachMinute+" pm",Toast.LENGTH_LONG).show();
+                NotificationCompat.Builder builer = new  NotificationCompat.Builder(UpComing.this);
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("prachi.wa"));
+                PendingIntent pendingIntent = PendingIntent.getActivity(UpComing.this, 01, intent, 0);
+                builer.setContentIntent(pendingIntent);
+                builer.setDefaults(Notification.DEFAULT_ALL);
+                builer.setContentTitle("Real Time Appointment System");
+                builer.setSmallIcon(R.drawable.stethoscope);
+                builer.setContentText("Appointment No: " + appointmentNumber +"\n"+"Reaching Time: "+startTime+":"+reachMinute+" pm");
+                NotificationManager notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+                notificationManager.notify (001,builer.build());
                 viewHolder.setName(model.getName());
                 viewHolder.setDistance(model.getDistance());
                 viewHolder.setLocation(model.getLocation());
                 viewHolder.setFees(model.getFees());
-                viewHolder.setTime(model.getTiming());
+                //viewHolder.setTiming(model.getTiming());
                 viewHolder.setType(model.getType());
 
 
@@ -128,10 +166,7 @@ public class UpComing extends AppCompatActivity {
 
     }
 
-    private void checkAppointmentBooked(){
 
-
-    }
 
     public static class DocViewHolder extends RecyclerView.ViewHolder {
         TextView AppointmentNumber;
@@ -167,7 +202,7 @@ public class UpComing extends AppCompatActivity {
 
         public void setAppointmentNumber(int appointmentNumber) {
 
-            AppointmentNumber.setText("No: "+appointmentNumber);
+            AppointmentNumber.setText("Appointment No: "+appointmentNumber);
         }
 
         public void setDistance(String distance) {
@@ -184,13 +219,18 @@ public class UpComing extends AppCompatActivity {
             Fees.setText("Rs "+fees);
         }
 
-        public void setTime(String timing) {
+        public void setTiming(int timing) {
             Time.setText("Time:"+timing);
         }
 
         public void setType(String type) {
 
             Type.setText(type);
+
+        }
+
+        public void setTiming(String reachTime1) {
+            Time.setText(reachTime1);
         }
     }
     @Override

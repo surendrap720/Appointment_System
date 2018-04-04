@@ -44,6 +44,7 @@ public class DocHospitalDetails extends AppCompatActivity {
     private String address = "";
     private String locationAddress = "";
     int maximumPatient = 0;
+    int averageTime = 0;
 
 
     private  DatabaseReference reference ;
@@ -81,12 +82,13 @@ public class DocHospitalDetails extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                 fees = Fees.getText().toString();
+                fees = Fees.getText().toString();
                 location = Location.getText().toString();
                 time = Time.getText().toString();
                 avg_time = Avg_Time.getText().toString();
-                 clinic_name = ClinicName.getText().toString();
-                 exp = Experience.getText().toString();
+                averageTime = Integer.parseInt(avg_time);
+                clinic_name = ClinicName.getText().toString();
+                exp = Experience.getText().toString();
                 maxPatient = maxPatients.getText().toString();
                 maximumPatient = Integer.parseInt(maxPatient);
 
@@ -98,7 +100,7 @@ public class DocHospitalDetails extends AppCompatActivity {
                     reference.child(type).child(user_id).child("fees").setValue(fees);
                     reference.child(type).child(user_id).child("location").setValue(location);
                     reference.child(type).child(user_id).child("time").setValue(time);
-                    reference.child(type).child(user_id).child("avg_time").setValue(avg_time);
+                    reference.child(type).child(user_id).child("avg_time").setValue(averageTime);
                     reference.child(type).child(user_id).child("clinic_name").setValue(clinic_name);
                     reference.child(type).child(user_id).child("exp").setValue(exp);
                     reference.child(type).child(user_id).child("maxPatient").setValue(maximumPatient);

@@ -15,12 +15,12 @@ public class DocDetail {
     private String gender;
     private String fees;
     private String id;
-    private String avg_time;
+    private int avg_time;
     private String type;
     private String clinic_name;
     private String experience;
 
-    public DocDetail(String name, String email, String dob, String mob, String time, String location, String gender, String fees, String id, String avg_time, String type, String clinic_name, String experience) {
+    public DocDetail(String name, String email, String dob, String mob, String time, String location, String gender, String fees, String id, int avg_time, String type, String clinic_name, String experience) {
         this.name = name;
         this.email = email;
         this.dob = dob;
@@ -108,11 +108,11 @@ public class DocDetail {
         this.id = id;
     }
 
-    public String getAvg_time() {
+    public int getAvg_time() {
         return avg_time;
     }
 
-    public void setAvg_time(String avg_time) {
+    public void setAvg_time(int avg_time) {
         this.avg_time = avg_time;
     }
 

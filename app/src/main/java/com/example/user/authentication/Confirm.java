@@ -51,16 +51,16 @@ public class Confirm extends AppCompatActivity {
     String displayType = "";
     String uid = "";
     String displayTime = "";
-    String displayAvgTime = "";
+    int displayAvgTime = 0;
     String lat = "";
     String lon = "";
     String displayContact = "";
     String displayEmail = "";
     String displayFees = "";
     String displayLocation = "";
-   String displayName = "";
-   String appointmentNumber="";
-   String user_id = "";
+    String displayName = "";
+    String appointmentNumber="";
+    String user_id = "";
     String lattitude,longitude;
     LocationManager locationManager;
     private static final int REQUEST_LOCATION = 1;
@@ -90,7 +90,6 @@ public class Confirm extends AppCompatActivity {
                if(currentPatientCount==maxPatient){
 
                    callPatientFull();
-
 
                }
            }
@@ -142,6 +141,7 @@ public class Confirm extends AppCompatActivity {
 
                    }
                }).create().show();
+
 
    }
 
@@ -212,7 +212,7 @@ public class Confirm extends AppCompatActivity {
                 displayContact = dataSnapshot.child("mob").getValue().toString();
                 String displayExp = dataSnapshot.child("exp").getValue().toString();
                 displayType = dataSnapshot.child("type").getValue().toString();
-                displayAvgTime = dataSnapshot.child("avg_time").getValue().toString();
+                displayAvgTime = dataSnapshot.child("avg_time").getValue(Integer.class);
                 lat = dataSnapshot.child("lat").getValue().toString();
                 lon = dataSnapshot.child("lon").getValue().toString();
                 displayEmail = dataSnapshot.child("email").getValue().toString();
@@ -248,39 +248,42 @@ public class Confirm extends AppCompatActivity {
                     finish();
                 } else {
 
-                    database.child("PatientCount").child(docId).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            currentPatientCount = dataSnapshot.child("currentPatient").getValue(Integer.class);
-                            maxPatient = dataSnapshot.child("maxPatient").getValue(Integer.class);
+                    if(currentPatientCount==maxPatient){
+                        Toast.makeText(Confirm.this,"Appointments are full",Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(Confirm.this,Home.class);
+                        startActivity(intent);
+                        finish();
 
-                            if(currentPatientCount==maxPatient){
-                                Toast.makeText(Confirm.this,"Appointments are full",Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent(Confirm.this,Home.class);
-                                startActivity(intent);
-                                finish();
+                    }
+                    else {
 
+
+                        database.child("Appointments").child(user_id).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if(!dataSnapshot.hasChild(docId)){
+
+                                    addMyAppointment();
+                                    addPatient();
+                                    senToUpcoming();
+
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
 
                             }
-                            else {
+                        });
 
-                                addMyAppointment();
-                                addPatient();
-                                senToUpcoming();
-                            }
-                        }
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
 
-                        }
-                    });
-
+                    }
 
 
                 }
-
-
+                Toast.makeText(Confirm.this, "Appointment already booked", Toast.LENGTH_LONG).show();
+                senToUpcoming();
             }
         });
 

@@ -6,7 +6,7 @@ package com.example.user.authentication;
 
 public class myAppointmentDetails {
    private int appointmentNumber;
-    private String avg_time;
+    private int avg_time;
     private String distance;
     private String docId;
     private String email;
@@ -17,7 +17,7 @@ public class myAppointmentDetails {
     private String timing ;
     private String type;
 
-    public myAppointmentDetails(int appointmentNumber, String avg_time, String distance, String docId, String email, String fees, String location, String mob, String name, String timing, String type) {
+    public myAppointmentDetails(int appointmentNumber, int avg_time, String distance, String docId, String email, String fees, String location, String mob, String name, String timing, String type) {
        this.appointmentNumber = appointmentNumber;
         this.avg_time = avg_time;
         this.distance = distance;
@@ -39,11 +39,11 @@ public class myAppointmentDetails {
         this.appointmentNumber = appointmentNumber;
     }
 
-    public String getAvg_time() {
+    public int getAvg_time() {
         return avg_time;
     }
 
-    public void setAvg_time(String avg_time) {
+    public void setAvg_time(int avg_time) {
         this.avg_time = avg_time;
     }
 
