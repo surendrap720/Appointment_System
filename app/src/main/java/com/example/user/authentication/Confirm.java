@@ -334,6 +334,7 @@ public class Confirm extends AppCompatActivity {
         Map newPost = new HashMap();
         newPost.put("patient_name",patientName);
         newPost.put("appointmentNumber",currentPatientCount);
+        newPost.put("patientId",user_id);
         database.child("PatientList").child(docId).child(user_id).setValue(newPost);
     }
 

@@ -27,7 +27,7 @@ public class DoctorRegistration extends AppCompatActivity {
     private EditText Name;
     private EditText Email;
     private EditText Dob;
-    private EditText Mob;
+    private TextView Mob;
     private EditText Type;
     private RadioGroup radioSexGroup;
     private RadioButton radioSexButton;
@@ -54,7 +54,7 @@ public class DoctorRegistration extends AppCompatActivity {
         Name = (EditText) findViewById(R.id.Name);
         Email = (EditText) findViewById(R.id.Email);
         Dob = (EditText) findViewById(R.id.Dob);
-        Mob = (EditText) findViewById(R.id.Mob);
+        Mob = (TextView) findViewById(R.id.Mob);
         Type = (EditText) findViewById(R.id.Type);
         Register_button = (Button) findViewById(R.id.save);
         logout_btn = (Button) findViewById(R.id.logout_btn);
@@ -62,14 +62,17 @@ public class DoctorRegistration extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         reference = FirebaseDatabase.getInstance().getReference();
 
+        Mob.setText("Mobile: "+mAuth.getCurrentUser().getPhoneNumber());
+
 
         Register_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+               // Toast.makeText(DoctorRegistration.this,"Phone Number" + mAuth.getCurrentUser().getPhoneNumber(),Toast.LENGTH_SHORT).show();
 
-
-                 name = Name.getText().toString();
+              //  Mob.setText(mAuth.getCurrentUser().getPhoneNumber());
+                name = Name.getText().toString();
                 email = Email.getText().toString();
                 dob = Dob.getText().toString();
                 mob = Mob.getText().toString();
@@ -77,11 +80,15 @@ public class DoctorRegistration extends AppCompatActivity {
                 gender = radioSexButton.getText().toString();
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-                if(!TextUtils.isEmpty(name)||!TextUtils.isEmpty(email)||!TextUtils.isEmpty(dob)||!TextUtils.isEmpty(mob)||!TextUtils.isEmpty(type)||!TextUtils.isEmpty(gender)) {
+                if(TextUtils.isEmpty(name)||TextUtils.isEmpty(email)||TextUtils.isEmpty(dob)||TextUtils.isEmpty(mob)||TextUtils.isEmpty(type)||TextUtils.isEmpty(gender)) {
+                    Toast.makeText(DoctorRegistration.this,"Fields are Empty",Toast.LENGTH_SHORT).show();
+
+                }
 
 
-                    if (user != null) {
+                else if(user != null) {
                         user_id = mAuth.getCurrentUser().getUid();
+
 
                         DatabaseReference docNames = FirebaseDatabase.getInstance().getReference().child("DocNames").child(user_id).child("Name");
 
@@ -115,14 +122,10 @@ public class DoctorRegistration extends AppCompatActivity {
                         startActivity(docHospitalDetails);
                         finish();
 
-
-                    }
                 }
 
-                else{
-                    Toast.makeText(DoctorRegistration.this, "Some of the fields are empty", Toast.LENGTH_SHORT).show();
 
-                }
+
             }
         });
 

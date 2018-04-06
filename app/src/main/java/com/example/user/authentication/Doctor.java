@@ -137,9 +137,6 @@ public class Doctor extends AppCompatActivity {
 
 
         recyclerView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-
-
 
     }
 

@@ -51,6 +51,8 @@ public class ViewAppointment extends AppCompatActivity   {
     private String stopHr="";
     private String stopMm="";
     private String user_id="";
+    private String patientId = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -109,8 +111,22 @@ public class ViewAppointment extends AppCompatActivity   {
             @Override
             protected void populateViewHolder(final ViewAppointment.DocViewHolder viewHolder, final PatientList model, int position) {
 
-                viewHolder.setPatient_name(model.getPatient_name());
 
+                viewHolder.setAppointmentNumber(model.getAppointmentNumber());
+                viewHolder.setPatient_name(model.getPatient_name());
+                patientId = model.getPatientId();
+
+
+               viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        Intent patientProfile = new Intent(ViewAppointment.this,PatientProfile.class);
+                        patientProfile.putExtra("patientId",patientId);
+                        startActivity(patientProfile);
+
+                    }
+                });
 
             }
 
@@ -135,6 +151,7 @@ public class ViewAppointment extends AppCompatActivity   {
     public static class DocViewHolder extends RecyclerView.ViewHolder {
 
         TextView Name;
+        TextView AppointmentNumber;
         private CardView card;
 
 
@@ -142,11 +159,17 @@ public class ViewAppointment extends AppCompatActivity   {
             super(itemView);
             card = (CardView) itemView.findViewById(R.id.card);
             Name = (TextView) itemView.findViewById(R.id.Name);
+            AppointmentNumber = (TextView) itemView.findViewById(R.id.AppointmentNumber);
 
         }
 
         public void setPatient_name(String patient_name) {
             Name.setText(patient_name);
+        }
+
+        public void setAppointmentNumber(int appointmentNumber) {
+
+            AppointmentNumber.setText(Integer.toString(appointmentNumber));
         }
     }
 
@@ -158,6 +181,7 @@ public class ViewAppointment extends AppCompatActivity   {
         startActivity(authIntent);
         finish();
     }
+
 
 
 

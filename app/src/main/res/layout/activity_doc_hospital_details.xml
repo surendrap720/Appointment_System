@@ -25,7 +25,8 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:hint="Fees"
-            android:inputType="phone"
+           android:inputType="number"
+
             android:maxEms="10" />
 
         <EditText
@@ -35,7 +36,8 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:hint="Location"
-            android:maxEms="10" />
+            android:maxEms="10"
+            android:inputType="text"/>
 
 
         <EditText
@@ -54,7 +56,8 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:maxEms="10"
-            android:hint="10yrs"/>
+            android:hint="10yrs"
+            android:inputType="number"/>
 
         <EditText
             android:id="@+id/ClinicName"
@@ -63,7 +66,8 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:maxEms="10"
-            android:hint="Ashirvad Hospital"/>
+            android:hint="Ashirvad Hospital"
+            android:inputType="text"/>
 
         <EditText
             android:id="@+id/Avg_Time"
@@ -72,7 +76,8 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:maxEms="10"
-            android:hint="10 minutes"/>
+            android:hint="10 minutes"
+            android:inputType="number"/>
 
         <EditText
             android:id="@+id/maxPatients"
@@ -81,7 +86,8 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:maxEms="10"
-            android:hint="10"/>
+            android:hint="10 patients"
+            android:inputType="number"/>
     </LinearLayout>
 
     <Button

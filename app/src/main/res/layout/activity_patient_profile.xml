@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:paddingTop="10dp"
+
+    tools:context="com.example.user.authentication.PatientProfile">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profileImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="2dp"
+        android:src="@drawable/profile"
+        android:layout_marginBottom="20dp"
+        />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:paddingTop="20dp"
+        android:text="NAME"
+        android:textSize="18sp"
+        android:drawableLeft="@drawable/ic_account_circle_black_24dp"
+        android:drawablePadding="20dp"/>
+
+    <TextView
+        android:id="@+id/dob"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="DOB"
+        android:paddingTop="20dp"
+        android:textSize="18sp"
+        android:drawableLeft="@drawable/ic_date_range_black_24dp"
+        android:drawablePadding="20dp"/>
+
+    <TextView
+        android:id="@+id/mob"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:drawableLeft="@drawable/ic_local_phone_black_24dp"
+        android:drawablePadding="20dp"
+        android:paddingTop="20dp"
+        android:text="MOB"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/gender"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="GENDER"
+        android:paddingTop="20dp"
+        android:textSize="18sp"
+        android:drawableLeft="@drawable/humanmale"
+        android:drawablePadding="20dp"/>
+
+    <TextView
+        android:id="@+id/email"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:drawableLeft="@drawable/ic_email_black_24dp"
+        android:drawablePadding="20dp"
+
+        android:paddingTop="20dp"
+        android:text="EMAIL"
+        android:textSize="18dp" />
+</LinearLayout>

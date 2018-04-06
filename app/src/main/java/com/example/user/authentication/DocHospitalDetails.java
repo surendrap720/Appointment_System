@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -45,8 +46,6 @@ public class DocHospitalDetails extends AppCompatActivity {
     private String locationAddress = "";
     int maximumPatient = 0;
     int averageTime = 0;
-
-
     private  DatabaseReference reference ;
 
 
@@ -73,8 +72,6 @@ public class DocHospitalDetails extends AppCompatActivity {
         if(intent != null) {
             type = intent.getExtras().getString("type", "");
             //Toast.makeText(Confirm.this,"docId is"+docId,Toast.LENGTH_SHORT).show();
-
-
         }
 
 
@@ -94,28 +91,37 @@ public class DocHospitalDetails extends AppCompatActivity {
 
                 getLatLong(location);
 
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if (user != null) {
-                    user_id = mAuth.getCurrentUser().getUid();
-                    reference.child(type).child(user_id).child("fees").setValue(fees);
-                    reference.child(type).child(user_id).child("location").setValue(location);
-                    reference.child(type).child(user_id).child("time").setValue(time);
-                    reference.child(type).child(user_id).child("avg_time").setValue(averageTime);
-                    reference.child(type).child(user_id).child("clinic_name").setValue(clinic_name);
-                    reference.child(type).child(user_id).child("exp").setValue(exp);
-                    reference.child(type).child(user_id).child("maxPatient").setValue(maximumPatient);
+                if(TextUtils.isEmpty(fees)||TextUtils.isEmpty(location)||TextUtils.isEmpty(time)||TextUtils.isEmpty(avg_time)||TextUtils.isEmpty(clinic_name)||TextUtils.isEmpty(exp)||TextUtils.isEmpty(maxPatient)){
+                    Toast.makeText(DocHospitalDetails.this,"Fields are empty",Toast.LENGTH_LONG).show();
+                }
+                else if(avg_time.length()<=0||avg_time.length()>2||maxPatient.length()<=0||maxPatient.length()>2){
 
-                    Map newPost = new HashMap();
-                    newPost.put("currentPatient",0);
-                    newPost.put("maxPatient", maximumPatient);
-                    reference.child("PatientCount").child(user_id).setValue(newPost);
+                    Toast.makeText(DocHospitalDetails.this,"Please Enter proper average time and maximum patient details",Toast.LENGTH_LONG).show();
+                }
+                else {
 
-                    Toast.makeText(DocHospitalDetails.this, "Your Details are saved.", Toast.LENGTH_SHORT).show();
-                    Intent viewAppointment = new Intent(DocHospitalDetails.this,ViewAppointment.class);
-                    startActivity(viewAppointment);
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    if (user != null) {
+                        user_id = mAuth.getCurrentUser().getUid();
+                        reference.child(type).child(user_id).child("fees").setValue(fees);
+                        reference.child(type).child(user_id).child("location").setValue(location);
+                        reference.child(type).child(user_id).child("time").setValue(time);
+                        reference.child(type).child(user_id).child("avg_time").setValue(averageTime);
+                        reference.child(type).child(user_id).child("clinic_name").setValue(clinic_name);
+                        reference.child(type).child(user_id).child("exp").setValue(exp);
+                        reference.child(type).child(user_id).child("maxPatient").setValue(maximumPatient);
+
+                        Map newPost = new HashMap();
+                        newPost.put("currentPatient", 0);
+                        newPost.put("maxPatient", maximumPatient);
+                        reference.child("PatientCount").child(user_id).setValue(newPost);
+
+                        Toast.makeText(DocHospitalDetails.this, "Your Details are saved.", Toast.LENGTH_SHORT).show();
+                        Intent viewAppointment = new Intent(DocHospitalDetails.this, ViewAppointment.class);
+                        startActivity(viewAppointment);
 
 
-
+                    }
                 }
             }
         });
@@ -132,15 +138,15 @@ public class DocHospitalDetails extends AppCompatActivity {
         });
 
 
-}
+    }
 
-private void getLatLong(String address){
+    private void getLatLong(String address){
 
-    GeocodingLocation locationAddress = new GeocodingLocation();
-    locationAddress.getAddressFromLocation(address,
-            getApplicationContext(), new GeocoderHandler());
+        GeocodingLocation locationAddress = new GeocodingLocation();
+        locationAddress.getAddressFromLocation(address,
+                getApplicationContext(), new GeocoderHandler());
 
-}
+    }
 
     private class GeocoderHandler extends Handler {
         @Override
@@ -152,10 +158,10 @@ private void getLatLong(String address){
                     Bundle bundle = message.getData();
                     locationAddress = bundle.getString("address");
                     address = locationAddress;
+                    Toast.makeText(DocHospitalDetails.this, "address is " + locationAddress , Toast.LENGTH_SHORT).show();
+
                     lat = address.substring(0,10);
                     lon = address.substring(11);
-
-
                     reference.child(type).child(user_id).child("lat").setValue(lat);
                     reference.child(type).child(user_id).child("lon").setValue(lon);
 

@@ -7,10 +7,30 @@ package com.example.user.authentication;
 public class PatientList {
 
 private String patient_name;
+private String patientId ;
+private int appointmentNumber;
 
-    public PatientList(String patient_name) {
+    public PatientList(String patient_name,String patientId, int appointmentNumber) {
 
         this.patient_name = patient_name;
+        this.patientId = patientId;
+        this.appointmentNumber = appointmentNumber;
+    }
+
+    public int getAppointmentNumber() {
+        return appointmentNumber;
+    }
+
+    public void setAppointmentNumber(int appointmentNumber) {
+        this.appointmentNumber = appointmentNumber;
+    }
+
+    public String getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(String patientId) {
+        this.patientId = patientId;
     }
 
     public String getPatient_name() {

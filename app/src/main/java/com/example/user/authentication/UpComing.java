@@ -238,6 +238,7 @@ public class UpComing extends AppCompatActivity {
 
         Intent doctor = new Intent(UpComing.this,Home.class);
         startActivity(doctor);
+        finish();
     }
 
 

@@ -94,7 +94,7 @@ public class AuthActivity extends AppCompatActivity {
 
                     if (!TextUtils.isEmpty(phone_number)) {
 
-                       if(len==10) {
+                       if(len==13) {
 
 
                            if (btnType == 0) {

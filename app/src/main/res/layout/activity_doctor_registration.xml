@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:hint="Enter D.O.B (DD/MM/YY)"
-            android:inputType="textPersonName"
+            android:inputType="date"
             android:maxEms="10"
             android:singleLine="true" />
 
@@ -94,7 +94,19 @@
 
         </RadioGroup>
 
-        <EditText
+       <!-- <EditText
+        android:id="@+id/Mob"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/linearLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:hint="Mobile No."
+        android:inputType="phone"
+        android:maxEms="10" />-->
+
+        <TextView
             android:id="@+id/Mob"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -102,9 +114,10 @@
             android:layout_below="@+id/linearLayout"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
-            android:hint="Mobile No."
-            android:inputType="phone"
-            android:maxEms="10" />
+            android:paddingTop="10dp"
+            android:text="234567"
+            android:textSize="18dp"
+            android:textStyle="bold"/>
 
         <EditText
             android:id="@+id/Type"
@@ -113,7 +126,7 @@
             android:layout_alignParentStart="true"
             android:layout_below="@+id/linearLayout"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="0dp"
             android:hint="physician"
             android:inputType="textPersonName"
             android:maxEms="10" />
