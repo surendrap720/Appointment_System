@@ -94,7 +94,7 @@ public class AuthActivity extends AppCompatActivity {
 
                     if (!TextUtils.isEmpty(phone_number)) {
 
-                       if(len==13) {
+                       if(len==10) {
 
 
                            if (btnType == 0) {
@@ -115,8 +115,8 @@ public class AuthActivity extends AppCompatActivity {
                            {
                                verify_btn.setEnabled(false);
                                String verificationCode = code_edit_text.getText().toString();
-                               int lenght = verificationCode.length();
-                               if(lenght==6) {
+                               int length = verificationCode.length();
+                               if(length==6) {
                                    PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, verificationCode);
                                    signInWithPhoneAuthCredential(credential);
                                }

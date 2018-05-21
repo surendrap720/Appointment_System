@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                final String name = Name.getText().toString();
                final String email = Email.getText().toString();
-                final String dob = Dob.getText().toString();
+               final String dob = Dob.getText().toString();
                 final String mob = Mob.getText().toString();
                 final String gender = radioSexButton.getText().toString();
 
@@ -127,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
                                     newPost.put("dob", dob);
                                     newPost.put("mob", mob);
                                     newPost.put("gender", gender);
+                                    newPost.put("appointment",null);
 
 
                                     current_user_db.setValue(newPost);

@@ -45,6 +45,7 @@ public class UpComing extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     DatabaseReference reference;
+    DatabaseReference reference2;
     private FirebaseAuth mAuth;
     String user_id = "";
     int startTime = 0;
@@ -55,6 +56,8 @@ public class UpComing extends AppCompatActivity {
     String reachTime1 ="";
     int reachHour = 0;
     int reachMinute = 0;
+   String doctorId = "";
+    int currentPatient = 0;
 
 
     @Override
@@ -110,7 +113,8 @@ public class UpComing extends AppCompatActivity {
         user_id = mAuth.getCurrentUser().getUid();
 
         reference = FirebaseDatabase.getInstance().getReference().child("Appointments").child(user_id);
-
+       final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+       reference2 = FirebaseDatabase.getInstance().getReference();
 
         FirebaseRecyclerAdapter<myAppointmentDetails, UpComing.DocViewHolder> adapter = new FirebaseRecyclerAdapter<myAppointmentDetails, UpComing.DocViewHolder>(
                 myAppointmentDetails.class,
@@ -154,6 +158,15 @@ public class UpComing extends AppCompatActivity {
                 viewHolder.setFees(model.getFees());
                 //viewHolder.setTiming(model.getTiming());
                 viewHolder.setType(model.getType());
+                doctorId = model.getDocId();
+
+                viewHolder.cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(UpComing.this,"Appointment cancelled ",Toast.LENGTH_LONG).show();
+                       // cancelAppointment(doctorId);
+                    }
+                });
 
 
 
@@ -167,6 +180,34 @@ public class UpComing extends AppCompatActivity {
     }
 
 
+ /*  private void cancelAppointment(String doctorId){
+
+      //  DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference();
+        reference2.child("PatientList").child(doctorId).child(user_id).removeValue();
+        reference2.child("Appointments").child(user_id).child(doctorId).removeValue();
+
+    }*/
+
+  /*  private void updateCurrentPatient(String doctorId){
+
+        reference2.child("PatientCount").child(doctorId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+            currentPatient = dataSnapshot.child("currentPatient").getValue(Integer.class);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        currentPatient = currentPatient-1;
+        reference2.child("PatientCount").child(doctorId).child("currentPatient").setValue(currentPatient);
+
+    }*/
 
     public static class DocViewHolder extends RecyclerView.ViewHolder {
         TextView AppointmentNumber;
@@ -177,6 +218,7 @@ public class UpComing extends AppCompatActivity {
         TextView Time;
         TextView Type;
         CardView card;
+        Button cancel;
 
         public DocViewHolder(View itemView) {
             super(itemView);
@@ -188,6 +230,7 @@ public class UpComing extends AppCompatActivity {
             Fees = (TextView) itemView.findViewById(R.id.Fees);
             Time = (TextView) itemView.findViewById(R.id.Time);
             Type = (TextView) itemView.findViewById(R.id.Type);
+            cancel = (Button) itemView.findViewById(R.id.cancel);
 
 
         }

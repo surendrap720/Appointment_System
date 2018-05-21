@@ -358,6 +358,7 @@ public class Confirm extends AppCompatActivity {
         database.child("Appointments").child(user_id).child(docId).setValue(newPost);
         getAppointmentNumber();
         setAppointmentDistance();
+        database.child("User").child(user_id).child("appointment").setValue(docId);
     }
 
 
